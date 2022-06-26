@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+
+  mariadb:
+    build: ./srcs/mariadb
+    image: mariadb:twagner
+    restart: always
+    ports: ['3306:3306']
