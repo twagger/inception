@@ -1,9 +1,11 @@
-version: '3'
+version: '3.7'
 
 services:
+  wordpress:
+    
 
   mariadb:
-    build: ./srcs/mariadb
+    build: ./reaquirements/mariadb
     image: mariadb:twagner
     restart: always
     ports: ['3306:3306']
