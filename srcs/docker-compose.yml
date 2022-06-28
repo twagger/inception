@@ -1,11 +1,45 @@
 version: '3.7'
 
 services:
-  wordpress:
-    
-
+  
   mariadb:
-    build: ./reaquirements/mariadb
-    image: mariadb:twagner
+    #image: mariadb:${TAG}
+    #build: ./requirements/mariadb
+    image: mariadb:10
+    container_name: mariadb
     restart: always
     ports: ['3306:3306']
+    volumes: ['db_data:/var/lib/mysql']
+    networks: ['docker-network']
+
+  wordpress:
+    depends_on: ['mariadb']
+    #image: wordpress:${TAG}
+    #build: ./requirements/wordpress
+    image: wordpress:6-fpm-alpine
+    container_name: wordpress
+    restart: always
+    ports: ['9000:9000']
+    volumes: ['wordpress_data:/var/www/html']
+    links: ['mariadb']
+    networks: ['docker-network']
+
+  nginx:
+    #image: nginx:${TAG}
+    #build: ./requirements/nginx
+    image: nginx:1
+    container_name: nginx
+    restart: always
+    ports: [8080:80]
+    volumes:
+      - ./requirements/nginx/conf:/etc/nginx/conf.d
+      - /data/html:/var/www/html
+    links: ['wordpress']
+    networks: ['docker-network']
+
+networks:
+  docker-network: {}
+
+volumes:
+  db_data: {}
+  wordpress_data: {}

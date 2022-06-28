@@ -2,51 +2,44 @@
 ################################################################################
 RM			= rm -f
 RMRF		= rm -rf
-CC			= c++
 CD			= cd
 MKDIR		= mkdir
-GCLONE		= git clone
+DOCKERIMG	= docker image
+DCOMPOSE	= docker compose
 
 # SOURCES
 ################################################################################
-SRCS		= main.cpp
-OBJS		= $(SRCS:.cpp=.o)
+ENVFILE		= .env
+
 
 # EXECUTABLES & LIBRARIES
 ################################################################################
-NAME		= inception
+NAME		= my_app
 
 # DIRECTORIES
 ################################################################################
-BUILD		= build
+SRCS		= ./srcs
 
 # FLAGS
 ################################################################################
-CPPFLAGS		:= -Wall -Wextra -Werror -std=c++98 -pedantic
-
-ifeq ($(DEBUG), true)
-	CPPFLAGS	+= -fsanitize=address -g3 -O0
-endif
+FLAGENV		= --env-file
+UP			= up -d
+DOWN		= down
+REMOVEIMGS	= --rmi all
 
 # RULES
 ################################################################################
-.c.o:
-			$(CC) $(CPPFLAGS) -c $< -o $(<:.cpp=.o) -I$(HEADERS)
-
-$(NAME):	$(OBJS)
-			$(CC) $(CPPFLAGS) $(OBJS) -o $(NAME) -I$(HEADERS)
+$(NAME):	
+			$(CD) $(SRCS) && $(DCOMPOSE) $(FLAGENV) $(ENVFILE) $(UP)
 
 all:		$(NAME)
 
 clean:
-			$(RM) $(OBJS)
+			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN)
 
-fclean:		clean
-			$(RM) $(NAME)
-
-
-test:		
+fclean:		
+			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN) $(REMOVEIMGS)
 
 re:			fclean all
 
-.PHONY:		all clean fclean c.o re
+.PHONY:		all clean fclean re
