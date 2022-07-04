@@ -40,6 +40,6 @@ clean:
 fclean:		
 			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN) $(REMOVEIMGS)
 
-re:			fclean all
+re:			clean all
 
 .PHONY:		all clean fclean re
