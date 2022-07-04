@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  
+  nginx:
+    image: nginx:${TAG}
+    build: ./requirements/nginx
+    #image: nginx:1
+    container_name: nginx
+    restart: always
+    ports: [80:80]
+    volumes:
+      - ./requirements/nginx/conf:/etc/nginx/
+      - /data/html:/www
+    networks: ['docker-network']
+
+networks:
+  docker-network: {}

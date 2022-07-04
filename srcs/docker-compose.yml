@@ -25,9 +25,9 @@ services:
     networks: ['docker-network']
 
   nginx:
-    #image: nginx:${TAG}
-    #build: ./requirements/nginx
-    image: nginx:1
+    image: nginx:${TAG}
+    build: ./requirements/nginx
+    #image: nginx:1
     container_name: nginx
     restart: always
     ports: [8080:80]

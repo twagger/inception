@@ -10,6 +10,7 @@ DCOMPOSE	= docker compose
 # SOURCES
 ################################################################################
 ENVFILE		= .env
+DCOMPOSEDEV	= docker-compose.dev.yml
 
 
 # EXECUTABLES & LIBRARIES
@@ -23,6 +24,7 @@ SRCS		= ./srcs
 # FLAGS
 ################################################################################
 FLAGENV		= --env-file
+FLAGFILE	= -f
 UP			= up -d
 DOWN		= down
 REMOVEIMGS	= --rmi all
@@ -34,6 +36,12 @@ $(NAME):
 
 all:		$(NAME)
 
+dev:		
+			$(CD) $(SRCS) && $(DCOMPOSE) \
+							 $(FLAGENV) $(ENVFILE) \
+							 $(FLAGFILE) $(DCOMPOSEDEV) \
+							 $(UP)
+
 clean:
 			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN)
 
@@ -41,5 +49,8 @@ fclean:
 			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN) $(REMOVEIMGS)
 
 re:			clean all
+
+re-dev:		clean dev
+fclean-dev: fclean
 
 .PHONY:		all clean fclean re
