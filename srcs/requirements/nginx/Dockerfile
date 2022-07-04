@@ -1,5 +1,6 @@
 FROM alpine:3.15
 
+# copy the conf file to the container
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 # install nginx and openssl 
