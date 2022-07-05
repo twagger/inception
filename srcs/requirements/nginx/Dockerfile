@@ -1,7 +1,7 @@
-FROM alpine:3.15
+FROM    alpine:3.15
 
 # copy the conf file to the container
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY    conf/nginx.conf /etc/nginx/nginx.conf
 
 # install nginx and openssl 
 RUN     apk update && \
@@ -24,6 +24,6 @@ RUN     mkdir /www
 # clean the cache to keep container small
 RUN     rm -rf /var/cache/apk/*
 
-EXPOSE 443
+EXPOSE  443
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD     ["nginx", "-g", "daemon off;"]
