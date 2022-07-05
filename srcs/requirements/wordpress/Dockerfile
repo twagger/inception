@@ -1,13 +1,13 @@
 FROM    alpine:3.15
 
 # •---------•
-# | PHP-FPM |
+# | PHP-FPM | << It takes 20 min to build ><
 # •---------•
 # env variables
 ENV     PHP_VERSION 8.1.7
 ENV     PHP_URL="https://www.php.net/distributions/php-8.1.7.tar.gz"
-ENV     PHP_SHA256=\
-            "5f0b422a117633c86d48d028934b8dc078309d4247e7565ea34b2686189abdd8"
+ENV     \
+PHP_SHA256="5f0b422a117633c86d48d028934b8dc078309d4247e7565ea34b2686189abdd8"
 ENV     PHP_INI="/usr/local/php/php.ini"
 ENV     WWW_CONF="/usr/local/etc/php-fpm.d/www.conf"
 

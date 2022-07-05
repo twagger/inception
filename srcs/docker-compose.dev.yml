@@ -11,5 +11,13 @@ services:
     volumes: ['/data/html:/www']
     networks: ['docker-network']
 
+  wordpress:
+    image: wordpress:${TAG}
+    build: ./requirements/wordpress
+    container_name: wordpress
+    restart: always
+    ports: ['9000:9000']
+    networks: ['docker-network']
+
 networks:
   docker-network: {}
