@@ -15,8 +15,9 @@ services:
     image: wordpress:${TAG}
     build: ./requirements/wordpress
     container_name: wordpress
-    restart: always
+    restart: always    
     ports: ['9000:9000']
+    volumes: ['/data/html:/www']
     networks: ['docker-network']
 
 networks:

@@ -47,10 +47,10 @@ clean:
 
 fclean:		
 			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN) $(REMOVEIMGS)
+			docker image prune -af
 
 re:			clean all
 
-re-dev:		clean dev
-fclean-dev: fclean
+re-dev:		fclean dev 
 
 .PHONY:		all clean fclean re
