@@ -33,6 +33,8 @@ RUN     mkdir /www \
  &&     rm latest.tar.gz \
  &&     chown -R www-data:www-data wordpress
 
+COPY   conf/wp-config.php   "/www/wordpress/wp-config.php" 
+
 EXPOSE  9000
 
 CMD     ["php-fpm7", "--fpm-config", "/etc/php7/php-fpm.conf"]
