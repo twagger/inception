@@ -17,7 +17,11 @@ services:
     container_name: wordpress
     restart: always
     ports: ['9000:9000']
+    volumes: ['wordpress_data:/www/wordpress']
     networks: ['docker-network']
 
 networks:
   docker-network: {}
+
+volumes:
+  wordpress_data: {}

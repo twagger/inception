@@ -20,22 +20,22 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'database_name_here' );
+define( 'DB_NAME', getenv('WORDPRESS_DB_NAME') );
 
 /** Database username */
-define( 'DB_USER', 'username_here' );
+define( 'DB_USER', getenv('WORDPRESS_DB_USER') );
 
 /** Database password */
-define( 'DB_PASSWORD', 'password_here' );
+define( 'DB_PASSWORD', getenv('WORDPRESS_DB_PASSWORD') );
 
 /** Database hostname */
-define( 'DB_HOST', 'localhost' );
+define( 'DB_HOST', getenv('WORDPRESS_DB_HOST') );
 
 /** Database charset to use in creating database tables. */
-define( 'DB_CHARSET', 'utf8' );
+define( 'DB_CHARSET', getenv('WORDPRESS_DB_CHARSET') );
 
 /** The database collate type. Don't change this if in doubt. */
-define( 'DB_COLLATE', '' );
+define( 'DB_COLLATE', getenv('WORDPRESS_DB_COLLATE') );
 
 /**#@+
  * Authentication unique keys and salts.
@@ -65,7 +65,7 @@ define( 'NONCE_SALT',       'put your unique phrase here' );
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix = 'wp_';
+$table_prefix = getenv('WORDPRESS_TABLE_PREFIX');
 
 /**
  * For developers: WordPress debugging mode.

@@ -35,6 +35,8 @@ RUN     mkdir /www \
 
 COPY   conf/wp-config.php   "/www/wordpress/wp-config.php" 
 
+VOLUME  wordpress_data
+
 EXPOSE  9000
 
 CMD     ["php-fpm7", "--fpm-config", "/etc/php7/php-fpm.conf"]
