@@ -2,10 +2,10 @@
 
 FROM    alpine:3.15
 
-# •---------•
+#  ---------
 # | PHP-FPM |
-# •---------•
-# prerequisites & dependencies
+#  ---------
+# install from package manager
 RUN     apk add --no-cache \
             php7 \
             php7-fpm \
@@ -20,9 +20,12 @@ COPY    conf/php.ini        "/etc/php7/php.ini"
 COPY    conf/php-fpm.conf   "/etc/php7/php-fpm.conf"
 COPY    conf/www.conf       "/etc/php7/php-fpm.d/www.conf"
 
-# •-----------•
+#  -----------
 # | WORDPRESS |
-# •-----------•
+#  -----------
+# install from package manager
+RUN     
+
 
 EXPOSE  9000
 
