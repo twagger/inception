@@ -9,7 +9,9 @@ FROM    alpine:3.15
 RUN     apk add --no-cache \
             php7 \
             php7-fpm \
-            php7-opcache
+            php7-opcache \
+            php7-mysqli
+
 
 # create the directory for pages on the container
 RUN     addgroup -g 82 -S www-data ; \
@@ -23,9 +25,13 @@ COPY    conf/www.conf       "/etc/php7/php-fpm.d/www.conf"
 #  -----------
 # | WORDPRESS |
 #  -----------
-# install from package manager
-RUN     
-
+# install from latest source
+RUN     mkdir /www \
+ &&     cd /www \
+ &&     wget http://wordpress.org/latest.tar.gz \
+ &&     tar -xzvf latest.tar.gz \
+ &&     rm latest.tar.gz \
+ &&     chown -R www-data:www-data wordpress
 
 EXPOSE  9000
 
