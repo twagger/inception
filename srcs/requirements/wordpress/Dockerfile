@@ -30,13 +30,11 @@ COPY    conf/www.conf       /etc/php8/php-fpm.d/
 # install from latest source with wp-cli
 RUN     mkdir /www \
  &&     cd /www \
- &&     wget http://wordpress.org/latest.tar.gz \
- &&     tar -xzvf latest.tar.gz \
- &&     rm latest.tar.gz \
- &&     chown -R www-data:www-data wordpress \
- &&     wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+ &&     wget \
+    https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
  &&     chmod +x wp-cli.phar \
- &&     mv wp-cli.phar /usr/local/bin/wp
+ &&     mv wp-cli.phar /usr/local/bin/wp \
+ &&     wp core download
 #add wp-cli
 
 # configure wordpress using wp-cli
