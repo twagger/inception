@@ -13,7 +13,16 @@ services:
 
   wordpress:
     image: wordpress:${TAG}
-    build: ./requirements/wordpress
+    build:
+      context: ./requirements/wordpress
+      args : 
+        - wp_db_host=${WORDPRESS_DB_HOST}
+        - wp_db_user=${WORDPRESS_DB_USER}
+        - wp_db_password=${WORDPRESS_DB_PASSWORD}
+        - wp_db_name=${WORDPRESS_DB_NAME}
+        - wp_table_prefix=${WORDPRESS_TABLE_PREFIX}
+        - wp_db_charset=${WORDPRESS_DB_CHARSET}
+        - wp_db_collate=${WORDPRESS_DB_COLLATE}
     container_name: wordpress
     restart: always
     ports: ['9000:9000']
