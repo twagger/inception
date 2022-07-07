@@ -17,8 +17,11 @@ services:
     container_name: wordpress
     restart: always
     ports: ['9000:9000']
-    volumes: ['/home/twagner/data/WordPress:/www/wordpress']
+    volumes: ['WordPress:/www/wordpress']
     networks: ['docker-network']
 
 networks:
   docker-network: {}
+
+volumes:
+  WordPress: {}
