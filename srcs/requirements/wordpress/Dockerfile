@@ -21,7 +21,8 @@ RUN     apk add --no-cache \
             php8-fpm \
             php8-opcache \
             php8-mysqli \
-            php8-phar
+            php8-phar \
+            mysql-client \
 
 # bin link
  &&     ln -s /usr/bin/php8 /usr/bin/php \
@@ -47,13 +48,13 @@ RUN     mkdir /www \
  &&     wp core download \ 
 # configure wp
  &&     wp config create \
-            --dbname=wp_db_name \
-            --dbuser=wp_db_user \
-            --dbpass=wp_db_password \
-            --dbhost=wp_db_host \
-            --dbprefix=wp_table_prefix \
-            --dbcharset=wp_db_charset \
-            --dbcollate=wp_db_collate
+            --dbname=$wp_db_name \
+            --dbuser=$wp_db_user \
+            --dbpass=$wp_db_password \
+            --dbhost=$wp_db_host \
+            --dbprefix=$wp_table_prefix \
+            --dbcharset=$wp_db_charset \
+            --dbcollate=$wp_db_collate
 
 # configure wordpress using wp-cli
 
