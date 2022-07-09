@@ -10,12 +10,22 @@ LABEL   org.opencontainers.image.version=0.1.0
 RUN     apk update && apk upgrade && apk add --update --no-cache \
             mariadb \
             mariadb-common \
-            mariadb-client \
 
 # create system tables in mysql database
  &&     mysql_install_db --user=mysql --ldata=/var/lib/mysql \
-# modify /etc/my.cnf to allow socket creation
- &&     sed -i 's|\[mysqld\]|\[mysqld\]\nuser=mysql\nsocket=/var/lib/mysql/mysql.sock|' /etc/my.cnf
+
+# modify /etc/my.cnf for mariadb conf
+ &&     sed -i 's|\[client-server\]|\
+        \[client-server\]\n \
+        port=3306|' \
+        /etc/my.cnf \ 
+ &&     sed -i 's|\[mysqld\]|\
+        \[mysqld\]\n \
+        user=mysql\n \
+        skip-networking=0\n \
+        socket=/var/lib/mysql/mysql.sock|' \
+        /etc/my.cnf
+
 # secure mysql for production < Load a sql file from conf
 # &&     mysql_secure_installation --user=mysql
 
