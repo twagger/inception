@@ -1,14 +1,23 @@
-FROM debian:buster
+# syntax=docker/dockerfile:1
+FROM    alpine:3.15
 
-RUN apt-get update
-RUN apt-get install -y mariadb-server
+# Labels
+LABEL   org.opencontainers.image.authors=twagner
+LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
+LABEL   org.opencontainers.image.version=0.1.0 
 
-EXPOSE 3306
+# install MariaDB from package manager
+RUN     apk update && apk upgrade && apk add --update --no-cache \
+            mariadb \
+            mariadb-common \
+            mariadb-client
 
-LABEL version="1.0"
-LABEL description="MariaDB Server"
+EXPOSE  3306
 
 HEALTHCHECK --start-period=5m \
-  CMD mariadb -e 'SELECT @@datadir;' || exit 1
+            CMD mariadb -e 'SELECT @@datadir;' || exit 1
 
-CMD ["mysqld"]
+# launch command as non root
+#USER    www-data
+
+CMD     ["mysqld"]

@@ -44,13 +44,15 @@ dev:
 
 clean:
 			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN)
+			docker image prune -af
 
 fclean:		
 			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN) $(REMOVEIMGS)
 			docker image prune -af
+			docker system prune --force --volumes
 
 re:			clean all
 
-re-dev:		fclean dev 
+re-dev:		clean dev 
 
 .PHONY:		all clean fclean re

@@ -8,7 +8,7 @@ LABEL   org.opencontainers.image.version=0.1.0
 
 
 # install nginx and openssl 
-RUN     apk update && apk upgrade && apk add --update \
+RUN     apk update && apk upgrade && apk add --update --no-cache \
             nginx \
             openssl \
 
@@ -28,9 +28,6 @@ RUN     apk update && apk upgrade && apk add --update \
         adduser -u 82 -D -S -G www-data www-data \
  &&     mkdir /www \
  &&     chown -R www-data:www-data /www \
-
-# clean the cache to keep container small
- &&     rm -rf /var/cache/apk/* \
 
 # correct rights for user that will launch the CMD
  &&     chown -R nginx /var/lib/nginx \

@@ -7,16 +7,19 @@ LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
 LABEL   org.opencontainers.image.version=0.1.0 
 
 # args
-ARG     wp_db_host
-ARG     wp_db_user
-ARG     wp_dp_password
-ARG     wp_db_name
-ARG     wp_table_prefix
-ARG     wp_db_charset
-ARG     wp_db_collate
+ARG     WP_DB_HOST
+ARG     WP_DB_USER
+ARG     WP_DP_PASSWORD
+ARG     WP_DB_NAME
+ARG     WP_TABLE_PREFIX
+ARG     WP_DB_CHARSET
+ARG     WP_DB_COLLATE
+ARG     WP_SITE_URL
+ARG     WP_SITE_TITLE
+ARG     WP_ADMIN_EMAIL
 
 # install PHP from package manager
-RUN     apk add --no-cache \
+RUN     apk update && apk upgrade && apk add --update --no-cache \
             php8 \
             php8-fpm \
             php8-opcache \
@@ -43,24 +46,29 @@ RUN     mkdir /www \
  &&     wget \
     https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
  &&     chmod +x wp-cli.phar \
- &&     mv wp-cli.phar /usr/local/bin/wp \
-# download wp files
- &&     wp core download \ 
-# configure wp
- &&     wp config create \
-            --dbname=$wp_db_name \
-            --dbuser=$wp_db_user \
-            --dbpass=$wp_db_password \
-            --dbhost=$wp_db_host \
-            --dbprefix=$wp_table_prefix \
-            --dbcharset=$wp_db_charset \
-            --dbcollate=$wp_db_collate
-
-# configure wordpress using wp-cli
+ &&     mv wp-cli.phar /usr/local/bin/wp 
+# # download wp files
+#  &&     wp core download \
+# # configure wp
+#  &&     wp config create \
+#             --dbname=$WP_DB_NAME \
+#             --dbuser=$WP_DB_USER \
+#             --dbpass=$WP_DB_PASSWORD \
+#             --dbhost=$WP_DB_HOST \
+#             --dbprefix=$WP_TABLE_PREFIX \
+#             --dbcharset=$WP_DB_CHARSET \
+#             --dbcollate=$WP_DB_COLLATE \
+#  &&     wp db create \
+#  &&     wp core install \
+#             --url=$WP_SITE_URL \
+#             --title=$WP_SITE_TITLE \
+#             --admin_user=$WP_DB_USER \
+#             --admin_password=$WP_DB_PASSWORD \
+#             --admin_email=$WP_ADMIN_EMAIL
 
 EXPOSE  9000
 
 # launch command as non root
-USER    www-data
+#USER    www-data
 
 CMD     ["php-fpm8"]
