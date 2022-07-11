@@ -15,11 +15,11 @@ mysql_install_db --user=mysql --datadir=/var/lib/mysql
 service mysql start
 
 # secure install
-mysql -e "UPDATE mysql.user SET Password = PASSWORD('twag') WHERE User = 'root'"
-mysql -e "DROP USER ''@'localhost'"
-mysql -e "DROP USER ''@'$(hostname)'"
-mysql -e "DROP DATABASE test"
-mysql -e "FLUSH PRIVILEGES"
+# mysql -e "UPDATE mysql.user SET Password = PASSWORD('twag') WHERE User = 'root'"
+# mysql -e "DROP USER ''@'localhost'"
+# mysql -e "DROP USER ''@'$(hostname)'"
+# mysql -e "DROP DATABASE test"
+# mysql -e "FLUSH PRIVILEGES"
 
 # new users
 mysql -e "USE mysql"
