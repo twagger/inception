@@ -11,6 +11,7 @@ LABEL   org.opencontainers.image.version=0.1.0
 RUN     apk update && apk upgrade && apk add --update --no-cache \
             nginx \
             openssl \
+ &&     rm -f /var/cache/apk/* \
 
 # generate self signed certificate
  &&     mkdir /etc/nginx/certificates && \

@@ -26,6 +26,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             php8-mysqli \
             php8-phar \
             mysql-client \
+ &&     rm -f /var/cache/apk/* \
 
 # bin link
  &&     ln -s /usr/bin/php8 /usr/bin/php \
