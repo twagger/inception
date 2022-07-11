@@ -1,36 +1,38 @@
 # syntax=docker/dockerfile:1
-FROM    alpine:3.15
+FROM    debian:buster
 
-# Labels
+# labels
 LABEL   org.opencontainers.image.authors=twagner
 LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
 LABEL   org.opencontainers.image.version=0.1.0 
 
+# args
+ARG     MYSQL_ROOT_PASSWORD
+ARG     MYSQL_DATABASE
+ARG     MYSQL_USER
+ARG     MYSQL_PASSWORD
+
 # install MariaDB from package manager
-RUN     apk update && apk upgrade && apk add --update --no-cache \
-            mariadb \
+RUN     apt-get update && apt-get install -y \
+            mariadb-server \
             mariadb-common \
             mariadb-client \
-            openrc \
- &&     rm -f /var/cache/apk/* \
+            systemd \
+ &&     apt-get clean \
 
-# create system tables in mysql database
-&&     mysql_install_db \
-            --user=mysql \
-            --datadir=/var/lib/mysql \
+# modify rights + creating folder for mysql pid and socket
+ &&     mkdir /var/run/mysqld \
+ &&     chown -R mysql:mysql /etc/mysql /var/run/mysqld \
 
-# modify /etc/my.cnf for mariadb conf
- &&     sed -i 's|\[client-server\]|\[client-server\]\nport=3306\n\
-        socket=/var/lib/mysql/mysql.sock|' /etc/my.cnf \ 
+# modify conf files
+ &&     sed -i 's|bind-address            = 127.0.0.1|bind-address=0.0.0.0|' \
+        /etc/mysql/mariadb.conf.d/50-server.cnf \
 
- &&     sed -i 's|\[mysqld\]|\[mysqld\]\nuser=mysql\n\
-        socket=/var/lib/mysql/mysql.sock|' /etc/my.cnf \
+ &&     sed -i 's|#port                   = 3306|port=3306|' \
+        /etc/mysql/mariadb.conf.d/50-server.cnf \
 
- &&     sed -i 's|skip-networking|#skip-networking|' \
-        /etc/my.cnf.d/mariadb-server.cnf \
-
- &&     sed -i 's|#bind-address=0.0.0.0|bind-address=0.0.0.0|' \
-        /etc/my.cnf.d/mariadb-server.cnf
+ &&     sed -i 's|log_error = |#log_error = /var/log/mysql/error.log|' \
+        /etc/mysql/mariadb.conf.d/50-server.cnf
 
 #HEALTHCHECK --start-period=5m \
 #            CMD mariadb -e 'SELECT @@datadir;' || exit 1
@@ -40,8 +42,9 @@ EXPOSE  3306
 COPY    conf/docker-entrypoint.sh /usr/local/bin/
 
 # launch command as non root
-USER    mysql
+USER    root
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 #CMD     ["mysqld_safe"]
+#CMD     ["tail", "-f", "/dev/null"]

@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM    alpine:3.15
 
-# Labels
+# labels
 LABEL   org.opencontainers.image.authors=twagner
 LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
 LABEL   org.opencontainers.image.version=0.1.0 
