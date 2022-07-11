@@ -21,7 +21,7 @@ mysql -e "DROP USER ''@'$(hostname)'"
 mysql -e "DROP DATABASE test"
 mysql -e "FLUSH PRIVILEGES"
 
-# users
+# new users
 mysql -e "USE mysql"
 mysql -e "GRANT ALL ON *.* TO '${MYSQL_ROOT_USER}'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION"
 mysql -e "GRANT ALL ON *.* TO '${MYSQL_ROOT_USER}'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION"
