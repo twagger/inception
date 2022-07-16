@@ -15,6 +15,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             php8-phar \
             php8-iconv \
             mysql-client \
+            openrc \
  &&     rm -f /var/cache/apk/* \
 
 # bin link
