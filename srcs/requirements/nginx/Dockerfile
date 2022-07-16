@@ -21,13 +21,13 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 		    -days 365 \
 		    -out /etc/nginx/certificates/twagner.cert \
 		    -nodes \
-		    -subj /CN=compute-1.amazonaws.com \
+		    -subj /CN=twagner.42.fr \
 
 # create the user and group and directory for pages on the container
  &&     addgroup -g 82 -S www-data ;\
         adduser -u 82 -D -S -G www-data www-data \
- &&     mkdir /www \
- &&     chown -R www-data:www-data /www \
+ &&     mkdir /var/www/wordpress \
+ &&     chown -R www-data:www-data /var/www \
 
 # correct rights for user that will launch the CMD
  &&     chown -R nginx /var/lib/nginx \

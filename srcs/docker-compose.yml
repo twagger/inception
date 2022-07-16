@@ -9,51 +9,51 @@ services:
     domainname: ${DOMAIN_NAME}
     restart: always
     ports: ['443:443']
-    volumes: ['/home/twagner/data/WordPress:/www']
+    volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
   mariadb:
     image: mariadb:${TAG}
     build: 
       context: ./requirements/mariadb
-      args:
-        - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
-        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     environment:
-        - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
-        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     container_name: mariadb
     restart: always
+    healthcheck:
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      start_period: 20s
     ports: ['3306:3306']
     volumes: ['db_data:/var/lib/mysql']
     networks: ['inception_network']
 
   wordpress:
     image: wordpress:${TAG}
-    depends_on: ['mariadb']
+    depends_on:
+      mariadb:
+        condition: service_healthy
     build:
       context: ./requirements/wordpress
-      args: 
-        - WP_DB_HOST=${WORDPRESS_DB_HOST}
-        - WP_DB_USER=${WORDPRESS_DB_USER}
-        - WP_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
-        - WP_DB_NAME=${WORDPRESS_DB_NAME}
-        - WP_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX}
-        - WP_DB_CHARSET=${WORDPRESS_DB_CHARSET}
-        - WP_DB_COLLATE=${WORDPRESS_DB_COLLATE}
-        - WP_SITE_URL=${WORDPRESS_SITE_URL}
-        - WP_SITE_TITLE=${WORDPRESS_SITE_TITLE}
-        - WP_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
+    environment: 
+      - WP_DB_HOST=${WORDPRESS_DB_HOST}
+      - WP_DB_USER=${WORDPRESS_DB_USER}
+      - WP_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+      - WP_DB_NAME=${WORDPRESS_DB_NAME}
+      - WP_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX}
+      - WP_DB_CHARSET=${WORDPRESS_DB_CHARSET}
+      - WP_DB_COLLATE=${WORDPRESS_DB_COLLATE}
+      - WP_SITE_URL=${WORDPRESS_SITE_URL}
+      - WP_SITE_TITLE=${WORDPRESS_SITE_TITLE}
+      - WP_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
     container_name: wordpress
     restart: always
     ports: ['9000:9000']
-    volumes: ['wordpress_data:/www/wordpress']
+    volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
 networks:
@@ -62,7 +62,15 @@ networks:
 
 volumes:
   wordpress_data:
-    name: wordpress_data
+    driver: local
+    driver_opts:
+      device: /home/twagner/data/wordpress
+      type: volume
+      o: bind
     
   db_data:
-    name: db_data
+    driver: local
+    driver_opts:
+      device: /home/twagner/data/db
+      type: volume
+      o: bind

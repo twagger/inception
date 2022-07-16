@@ -33,13 +33,10 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     sed -i "s|.*skip-networking.*|#skip-networking|g" \
         /etc/my.cnf.d/mariadb-server.cnf
 
-#HEALTHCHECK --start-period=5m \
-#            CMD mariadb -e 'SELECT @@datadir;' || exit 1
-
 EXPOSE  3306
 
-COPY    conf/docker-entrypoint.sh /usr/local/bin/
-COPY    conf/db_config.sql        /tmp/mysql
+COPY    script/docker-entrypoint.sh /usr/local/bin/
+COPY    conf/db_config.sql          /tmp/mysql
 
 # launch command as non root
 USER    mysql

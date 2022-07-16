@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# create a verif to launch only on setup
+
 # install system databases
 mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
