@@ -10,7 +10,7 @@ DCOMPOSE	= docker compose
 # SOURCES
 ################################################################################
 ENVFILE		= .env
-DCOMPOSEDEV	= docker-compose.dev.yml
+DCOMPOSEDEV	= docker-compose.yml
 
 
 # EXECUTABLES & LIBRARIES
@@ -36,23 +36,14 @@ $(NAME):
 
 all:		$(NAME)
 
-dev:		
-			$(CD) $(SRCS) && $(DCOMPOSE) \
-							 $(FLAGENV) $(ENVFILE) \
-							 $(FLAGFILE) $(DCOMPOSEDEV) \
-							 $(UP)
-
 clean:
 			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN)
 			docker image prune -af
 
 fclean:		
 			$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN) $(REMOVEIMGS)
-			docker image prune -af
-			docker system prune --force --volumes
+			docker system prune --all --force --volumes
 
-re:			clean all
-
-re-dev:		clean dev 
+re:			fclean all
 
 .PHONY:		all clean fclean re

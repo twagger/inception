@@ -2,44 +2,67 @@ version: '3.7'
 
 services:
   
+  nginx:
+    image: nginx:${TAG}
+    build: ./requirements/nginx
+    container_name: nginx
+    domainname: ${DOMAIN_NAME}
+    restart: always
+    ports: ['443:443']
+    volumes: ['/home/twagner/data/WordPress:/www']
+    networks: ['inception_network']
+
   mariadb:
-    #image: mariadb:${TAG}
-    #build: ./requirements/mariadb
-    image: mariadb:10
+    image: mariadb:${TAG}
+    build: 
+      context: ./requirements/mariadb
+      args:
+        - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    environment:
+        - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     container_name: mariadb
     restart: always
     ports: ['3306:3306']
     volumes: ['db_data:/var/lib/mysql']
-    networks: ['docker-network']
+    networks: ['inception_network']
 
   wordpress:
+    image: wordpress:${TAG}
     depends_on: ['mariadb']
-    #image: wordpress:${TAG}
-    #build: ./requirements/wordpress
-    image: wordpress:6-fpm-alpine
+    build:
+      context: ./requirements/wordpress
+      args: 
+        - WP_DB_HOST=${WORDPRESS_DB_HOST}
+        - WP_DB_USER=${WORDPRESS_DB_USER}
+        - WP_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+        - WP_DB_NAME=${WORDPRESS_DB_NAME}
+        - WP_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX}
+        - WP_DB_CHARSET=${WORDPRESS_DB_CHARSET}
+        - WP_DB_COLLATE=${WORDPRESS_DB_COLLATE}
+        - WP_SITE_URL=${WORDPRESS_SITE_URL}
+        - WP_SITE_TITLE=${WORDPRESS_SITE_TITLE}
+        - WP_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
     container_name: wordpress
     restart: always
     ports: ['9000:9000']
-    volumes: ['wordpress_data:/var/www/html']
-    links: ['mariadb']
-    networks: ['docker-network']
-
-  nginx:
-    image: nginx:${TAG}
-    build: ./requirements/nginx
-    #image: nginx:1
-    container_name: nginx
-    restart: always
-    ports: [8080:80]
-    volumes:
-      - ./requirements/nginx/conf:/etc/nginx/conf.d
-      - /data/html:/var/www/html
-    links: ['wordpress']
-    networks: ['docker-network']
+    volumes: ['wordpress_data:/www/wordpress']
+    networks: ['inception_network']
 
 networks:
-  docker-network: {}
+  inception_network:
+    name: inception_network
 
 volumes:
-  db_data: {}
-  wordpress_data: {}
+  wordpress_data:
+    name: wordpress_data
+    
+  db_data:
+    name: db_data

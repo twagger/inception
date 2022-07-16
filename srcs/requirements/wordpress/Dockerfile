@@ -49,17 +49,17 @@ RUN     mkdir /www \
  &&     chmod +x wp-cli.phar \
  &&     mv wp-cli.phar /usr/local/bin/wp \ 
 # download wp files
- &&     wp core download 
+ &&     wp core download
 # configure wp
- &&     wp config create \
-            --dbname=$WP_DB_NAME \
-            --dbuser=$WP_DB_USER \
-            --dbpass=$WP_DB_PASSWORD \
-            --dbhost=$WP_DB_HOST \
-            --dbprefix=$WP_TABLE_PREFIX \
-            --dbcharset=$WP_DB_CHARSET \
-            --dbcollate=$WP_DB_COLLATE \
- &&     wp db create
+#  &&     wp config create \
+#             --dbname=$WP_DB_NAME \
+#             --dbuser=$WP_DB_USER \
+#             --dbpass=$WP_DB_PASSWORD \
+#             --dbhost=$WP_DB_HOST \
+#             --dbprefix=$WP_TABLE_PREFIX \
+#             --dbcharset=$WP_DB_CHARSET \
+#             --dbcollate=$WP_DB_COLLATE \
+#  &&     wp db create
 #  &&     wp core install \
 #             --url=$WP_SITE_URL \
 #             --title=$WP_SITE_TITLE \

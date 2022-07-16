@@ -1,0 +1,50 @@
+# syntax=docker/dockerfile:1
+FROM    debian:buster
+
+# labels
+LABEL   org.opencontainers.image.authors=twagner
+LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
+LABEL   org.opencontainers.image.version=0.1.0 
+
+# args
+ARG     MYSQL_ROOT_PASSWORD
+ARG     MYSQL_DATABASE
+ARG     MYSQL_USER
+ARG     MYSQL_PASSWORD
+
+# install MariaDB from package manager
+RUN     apt-get update && apt-get install -y \
+            mariadb-server \
+            mariadb-common \
+            mariadb-client \
+            systemd \
+ &&     apt-get clean \
+
+# modify rights + creating folder for mysql pid and socket
+ &&     mkdir /var/run/mysqld \
+ &&     chown -R mysql:mysql /etc/mysql /var/run/mysqld \
+
+# modify conf files
+ &&     sed -i 's|bind-address            = 127.0.0.1|bind-address=0.0.0.0|' \
+        /etc/mysql/mariadb.conf.d/50-server.cnf \
+
+ &&     sed -i 's|#port                   = 3306|port=3306|' \
+        /etc/mysql/mariadb.conf.d/50-server.cnf \
+
+ &&     sed -i 's|log_error = |#log_error = /var/log/mysql/error.log|' \
+        /etc/mysql/mariadb.conf.d/50-server.cnf
+
+#HEALTHCHECK --start-period=5m \
+#            CMD mariadb -e 'SELECT @@datadir;' || exit 1
+
+EXPOSE  3306
+
+COPY    conf/docker-entrypoint.sh /usr/local/bin/
+
+# launch command as non root
+USER    root
+
+#ENTRYPOINT ["docker-entrypoint.sh"]
+
+#CMD     ["mysqld_safe"]
+CMD     ["tail", "-f", "/dev/null"]

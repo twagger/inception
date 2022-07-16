@@ -1,38 +1,37 @@
 # syntax=docker/dockerfile:1
-FROM    debian:buster
+FROM    alpine:3.15
 
 # labels
 LABEL   org.opencontainers.image.authors=twagner
 LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
 LABEL   org.opencontainers.image.version=0.1.0 
 
-# args
-ARG     MYSQL_ROOT_PASSWORD
-ARG     MYSQL_DATABASE
-ARG     MYSQL_USER
-ARG     MYSQL_PASSWORD
-
 # install MariaDB from package manager
-RUN     apt-get update && apt-get install -y \
-            mariadb-server \
+RUN     apk update && apk upgrade && apk add --update --no-cache \
+            mariadb \
             mariadb-common \
             mariadb-client \
-            systemd \
- &&     apt-get clean \
+ &&     rm -f /var/cache/apk/* \
 
 # modify rights + creating folder for mysql pid and socket
- &&     mkdir /var/run/mysqld \
- &&     chown -R mysql:mysql /etc/mysql /var/run/mysqld \
+ &&     mkdir /run/mysqld /tmp/mysql \
+ &&     chown -R mysql:mysql /etc/mysql /run/mysqld /var/lib/mysql \
+        /usr/lib/mariadb /tmp/mysql \
 
-# modify conf files
- &&     sed -i 's|bind-address            = 127.0.0.1|bind-address=0.0.0.0|' \
-        /etc/mysql/mariadb.conf.d/50-server.cnf \
+# modify conf file
+ &&     sed -i \
+        's|\[client-server\]|\[client-server\]\nport=3306\nsocket=/run/mysqld/mysqld.sock|g' \
+        /etc/my.cnf \
+ 
+ &&     sed -i \
+        's|\[mysqld\]|\[mysqld\]\nuser=mysql\ndatadir=/var/lib/mysql|g' \
+        /etc/my.cnf \
 
- &&     sed -i 's|#port                   = 3306|port=3306|' \
-        /etc/mysql/mariadb.conf.d/50-server.cnf \
+ &&     sed -i "s|.*bind-address\s*=.*|bind-address=0.0.0.0|g" \
+        /etc/my.cnf.d/mariadb-server.cnf \
 
- &&     sed -i 's|log_error = |#log_error = /var/log/mysql/error.log|' \
-        /etc/mysql/mariadb.conf.d/50-server.cnf
+ &&     sed -i "s|.*skip-networking.*|#skip-networking|g" \
+        /etc/my.cnf.d/mariadb-server.cnf
 
 #HEALTHCHECK --start-period=5m \
 #            CMD mariadb -e 'SELECT @@datadir;' || exit 1
@@ -40,9 +39,10 @@ RUN     apt-get update && apt-get install -y \
 EXPOSE  3306
 
 COPY    conf/docker-entrypoint.sh /usr/local/bin/
+COPY    conf/db_config.sql        /tmp/mysql
 
 # launch command as non root
-USER    root
+USER    mysql
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
