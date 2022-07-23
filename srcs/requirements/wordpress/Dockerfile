@@ -21,16 +21,14 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             mysql-client \
             shadow \
  &&     rm -f /var/cache/apk/* \
-
+\
 # bin link
  &&     ln -s /usr/bin/php8 /usr/bin/php \
-
+\
 # modify existing user and group on the container (system group, user no pwd)
  &&     useradd www-data -g www-data \
  &&     usermod -u ${USER_ID} www-data \
  &&     groupmod -g ${GROUP_ID} www-data
-#  &&     addgroup -g ${GROUP_ID} -S www-data ; \
-#         adduser -u ${USER_ID} -D -S -G www-data www-data && exit 0 ; exit 1
 
 # make www dir and adjust rights
 RUN     mkdir /var/www /var/www/wordpress \

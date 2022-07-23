@@ -16,7 +16,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             openssl \
             shadow \
  &&     rm -f /var/cache/apk/* \
-
+\
 # generate self signed certificate
  &&     mkdir /etc/nginx/certificates && \
 	    openssl req \
@@ -27,16 +27,14 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 		    -out /etc/nginx/certificates/twagner.cert \
 		    -nodes \
 		    -subj /CN=twagner.42.fr \
-
+\
 # create the user and group and directory for pages on the container
  &&     useradd www-data -g www-data \
  &&     usermod -u ${USER_ID} www-data \
  &&     groupmod -g ${GROUP_ID} www-data \
-#  &&     addgroup -g ${GROUP_ID} -S www-data ;\
-#         adduser -u ${USER_ID} -D -S -G www-data www-data \
  &&     mkdir /var/www/wordpress \
  &&     chown -R www-data:www-data /var/www \
-
+\
 # correct rights for user that will launch the CMD
  &&     chown -R nginx /var/lib/nginx \
  &&     chown -R nginx /etc/nginx

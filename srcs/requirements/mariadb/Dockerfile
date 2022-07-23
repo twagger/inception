@@ -17,26 +17,26 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             mariadb-client \
             shadow \
  &&     rm -f /var/cache/apk/* \
-
+\
 # modify rights + creating folder for mysql pid and socket
  &&     usermod -u ${USER_ID} mysql \
  &&     groupmod -g ${GROUP_ID} mysql \
  &&     mkdir /run/mysqld /tmp/mysql \
  &&     chown -R mysql:mysql /etc/mysql /run/mysqld /var/lib/mysql \
         /usr/lib/mariadb /tmp/mysql \
-
+\
 # modify conf file
  &&     sed -i \
         's|\[client-server\]|\[client-server\]\nport=3306\nsocket=/run/mysqld/mysqld.sock|g' \
         /etc/my.cnf \
- 
+\
  &&     sed -i \
         's|\[mysqld\]|\[mysqld\]\nuser=mysql\ndatadir=/var/lib/mysql|g' \
         /etc/my.cnf \
-
+\
  &&     sed -i "s|.*bind-address\s*=.*|bind-address=0.0.0.0|g" \
         /etc/my.cnf.d/mariadb-server.cnf \
-
+\
  &&     sed -i "s|.*skip-networking.*|#skip-networking|g" \
         /etc/my.cnf.d/mariadb-server.cnf
 
