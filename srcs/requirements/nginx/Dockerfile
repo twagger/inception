@@ -44,8 +44,7 @@ COPY    conf/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE  443
 
-# launch command as non root
-#USER    nginx
+# launch command as non root : nginx will then use www-data
 USER    root
 
 CMD     ["nginx", "-g", "daemon off;"]

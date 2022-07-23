@@ -49,6 +49,3 @@ COPY    conf/db_config.sql          /tmp/mysql
 USER    mysql
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-
-#CMD     ["mysqld_safe"]
-#CMD     ["tail", "-f", "/dev/null"]

@@ -28,7 +28,9 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 # modify existing user and group on the container (system group, user no pwd)
  &&     useradd www-data -g www-data \
  &&     usermod -u ${USER_ID} www-data \
- &&     groupmod -g ${GROUP_ID} www-data
+ &&     groupmod -g ${GROUP_ID} www-data \
+ &&     mkdir /home/www-data \
+ &&     chown -R www-data:www-data /home/www-data
 
 # make www dir and adjust rights
 RUN     mkdir /var/www /var/www/wordpress \
@@ -47,4 +49,3 @@ EXPOSE  9000
 USER    www-data
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-#CMD     ["php-fpm8"]

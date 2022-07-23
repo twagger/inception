@@ -10,9 +10,9 @@ services:
         - USER_ID=${USER_ID}
         - GROUP_ID=${GROUP_ID}
     container_name: nginx
-    #depends_on:
-    # wordpress:
-    #   condition: service_healthy
+    depends_on:
+      wordpress:
+        condition: service_started
     domainname: ${DOMAIN_NAME}
     restart: always
     ports: ['443:443']
@@ -63,9 +63,6 @@ services:
       - WP_SITE_TITLE=${WORDPRESS_SITE_TITLE}
       - WP_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
     container_name: wordpress
-    # healthcheck:
-    #   test: ["CMD", "/etc/init.d/php-fpm8 status"]
-    #   start_period: 20s
     restart: always
     ports: ['9000:9000']
     volumes: ['wordpress_data:/var/www/wordpress']
