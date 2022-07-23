@@ -39,6 +39,7 @@ COPY    conf/nginx.conf /etc/nginx/nginx.conf
 EXPOSE  443
 
 # launch command as non root
-USER    nginx
+#USER    nginx
+USER    root
 
 CMD     ["nginx", "-g", "daemon off;"]

@@ -15,19 +15,18 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             php8-phar \
             php8-iconv \
             mysql-client \
-            openrc \
  &&     rm -f /var/cache/apk/* \
 
 # bin link
  &&     ln -s /usr/bin/php8 /usr/bin/php \
 
-# create the user and group on the container
+# create the user and group on the container (system group, user no pwd)
  &&     addgroup -g 82 -S www-data ; \
         adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
 
 # make www dir and adjust rights
-RUN     mkdir /www \
- &&     chown -R www-data:www-data /www 
+RUN     mkdir /var/www /var/www/wordpress \
+ &&     chown -R www-data:www-data /var/www
 
 # configure PHP
 COPY    conf/php-fpm.conf   /etc/php8/
@@ -39,7 +38,7 @@ COPY    script/docker-entrypoint.sh /usr/local/bin/
 EXPOSE  9000
 
 # launch command as non root
-#USER    www-data
+USER    www-data
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 #CMD     ["php-fpm8"]

@@ -5,16 +5,12 @@ cd /var/www/wordpress
 # download wp-cli
 wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
-mv wp-cli.phar /usr/local/bin/wp
 
 # download wp files
-wp core download
-
-# wait for mariadb server to be fully up
-#sleep 30
+./wp-cli.phar core download
 
 # configure wp
-wp config create \
+./wp-cli.phar config create \
     --dbname=$WP_DB_NAME \
     --dbuser=$WP_DB_USER \
     --dbpass=$WP_DB_PASSWORD \
@@ -24,10 +20,10 @@ wp config create \
     --dbcollate=$WP_DB_COLLATE \
 
 # create wordpress database
-wp db create
+./wp-cli.phar db create
 
 # install wordpress
-wp core install \
+./wp-cli.phar core install \
     --url=$WP_SITE_URL \
     --title=$WP_SITE_TITLE \
     --admin_user=$WP_DB_USER \
