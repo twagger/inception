@@ -6,10 +6,15 @@ LABEL   org.opencontainers.image.authors=twagner
 LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
 LABEL   org.opencontainers.image.version=0.1.0 
 
-# install nginx and openssl 
+# args for proper user rights management
+ARG     USER_ID=${USER_ID}
+ARG     GROUP_ID=${GROUP_ID}
+
+# install nginx and openssl and shadow (login and pass utilities) 
 RUN     apk update && apk upgrade && apk add --update --no-cache \
             nginx \
             openssl \
+            shadow \
  &&     rm -f /var/cache/apk/* \
 
 # generate self signed certificate
@@ -24,8 +29,11 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 		    -subj /CN=twagner.42.fr \
 
 # create the user and group and directory for pages on the container
- &&     addgroup -g 82 -S www-data ;\
-        adduser -u 82 -D -S -G www-data www-data \
+ &&     useradd www-data -g www-data \
+ &&     usermod -u ${USER_ID} www-data \
+ &&     groupmod -g ${GROUP_ID} www-data \
+#  &&     addgroup -g ${GROUP_ID} -S www-data ;\
+#         adduser -u ${USER_ID} -D -S -G www-data www-data \
  &&     mkdir /var/www/wordpress \
  &&     chown -R www-data:www-data /var/www \
 

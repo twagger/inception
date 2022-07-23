@@ -6,14 +6,21 @@ LABEL   org.opencontainers.image.authors=twagner
 LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
 LABEL   org.opencontainers.image.version=0.1.0 
 
-# install MariaDB from package manager
+# args for proper user rights management
+ARG     USER_ID=${USER_ID}
+ARG     GROUP_ID=${GROUP_ID}
+
+# install MariaDB from package manager and shadow (login and pass utilities)
 RUN     apk update && apk upgrade && apk add --update --no-cache \
             mariadb \
             mariadb-common \
             mariadb-client \
+            shadow \
  &&     rm -f /var/cache/apk/* \
 
 # modify rights + creating folder for mysql pid and socket
+ &&     usermod -u ${USER_ID} mysql \
+ &&     groupmod -g ${GROUP_ID} mysql \
  &&     mkdir /run/mysqld /tmp/mysql \
  &&     chown -R mysql:mysql /etc/mysql /run/mysqld /var/lib/mysql \
         /usr/lib/mariadb /tmp/mysql \

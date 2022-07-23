@@ -6,7 +6,11 @@ LABEL   org.opencontainers.image.authors=twagner
 LABEL   org.opencontainers.image.source=https://github.com/twagger/inception
 LABEL   org.opencontainers.image.version=0.1.0 
 
-# install PHP from package manager
+# args for proper user rights management
+ARG     USER_ID=${USER_ID}
+ARG     GROUP_ID=${GROUP_ID}
+
+# install PHP from package manager and shadow (login and pass utilities)
 RUN     apk update && apk upgrade && apk add --update --no-cache \
             php8 \
             php8-fpm \
@@ -15,14 +19,18 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             php8-phar \
             php8-iconv \
             mysql-client \
+            shadow \
  &&     rm -f /var/cache/apk/* \
 
 # bin link
  &&     ln -s /usr/bin/php8 /usr/bin/php \
 
-# create the user and group on the container (system group, user no pwd)
- &&     addgroup -g 82 -S www-data ; \
-        adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
+# modify existing user and group on the container (system group, user no pwd)
+ &&     useradd www-data -g www-data \
+ &&     usermod -u ${USER_ID} www-data \
+ &&     groupmod -g ${GROUP_ID} www-data
+#  &&     addgroup -g ${GROUP_ID} -S www-data ; \
+#         adduser -u ${USER_ID} -D -S -G www-data www-data && exit 0 ; exit 1
 
 # make www dir and adjust rights
 RUN     mkdir /var/www /var/www/wordpress \

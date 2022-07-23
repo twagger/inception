@@ -4,7 +4,11 @@ services:
   
   nginx:
     image: nginx:${TAG}
-    build: ./requirements/nginx
+    build: 
+      context: ./requirements/nginx
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
     container_name: nginx
     #depends_on:
     # wordpress:
@@ -19,6 +23,9 @@ services:
     image: mariadb:${TAG}
     build: 
       context: ./requirements/mariadb
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
     environment:
       - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -41,6 +48,9 @@ services:
         condition: service_healthy
     build:
       context: ./requirements/wordpress
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
     environment: 
       - WP_DB_HOST=${WORDPRESS_DB_HOST}
       - WP_DB_USER=${WORDPRESS_DB_USER}

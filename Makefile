@@ -14,7 +14,6 @@ else
 	RESET        := ""
 endif
 
-
 # COMMANDS
 ################################################################################
 RM              = rm -f
@@ -59,6 +58,11 @@ ADDRESS			= 34.173.196.190
 LOCADDRESS		= 10.128.0.5 
 HOST_UPDATED	= $(shell [ -e .host_updated ] && echo 1 || echo 0 )
 
+# USER & GROUP
+################################################################################
+UID				= $(shell id -u ${USER})
+GID				= $(shell id -g ${USER})
+
 # RULES
 ################################################################################
 $(NAME):	
@@ -76,7 +80,13 @@ ifeq ($(BINDDIR_EXISTS), 0)
 				@sudo $(MKDIR) $(DATABIND)/db
 				@echo " : $(GREEN)OK !$(RESET)"
 endif
-				
+				@printf "$(BLUE)Updating : $(RESET) $(YELLOW)[UID/GID]$(RESET)" 
+				@sudo $(REPLACE) "s|.*USER_ID.*|USER_ID=$(UID)|g" \
+					  $(SRCS)/$(ENVFILE)
+				@sudo $(REPLACE) "s|.*GROUP_ID.*|GROUP_ID=$(GID)|g" \
+				      $(SRCS)/$(ENVFILE)
+				@echo "  : $(GREEN)OK !$(RESET)"
+
 				@echo "$(BLUE)Starting : $(RESET) $(YELLOW)[Containers]$(RESET)" 
 				$(CD) $(SRCS) && $(DCOMPOSE) $(FLAGENV) $(ENVFILE) $(UP)
 
