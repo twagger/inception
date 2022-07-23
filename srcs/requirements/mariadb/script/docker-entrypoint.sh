@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# create a verif to launch only on setup
+# patch the install script to fix pam auth issue
+patch /usr/bin/mariadb-install-db /tmp/mysql/patch_auth.txt
+rm -f /tmp/mysql/patch_auth.txt
 
 # install system databases
 mysql_install_db --user=mysql --datadir=/var/lib/mysql

@@ -16,6 +16,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             mariadb-common \
             mariadb-client \
             shadow \
+            patch \
  &&     rm -f /var/cache/apk/* \
 \
 # modify rights + creating folder for mysql pid and socket
@@ -23,7 +24,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     groupmod -g ${GROUP_ID} mysql \
  &&     mkdir /run/mysqld /tmp/mysql \
  &&     chown -R mysql:mysql /etc/mysql /run/mysqld /var/lib/mysql \
-        /usr/lib/mariadb /tmp/mysql \
+        /usr/lib/mariadb /tmp/mysql /usr/bin/ \
 \
 # modify conf file
  &&     sed -i \
@@ -44,6 +45,7 @@ EXPOSE  3306
 
 COPY    script/docker-entrypoint.sh /usr/local/bin/
 COPY    conf/db_config.sql          /tmp/mysql
+COPY    conf/patch_auth.txt         /tmp/mysql
 
 # launch command as non root
 USER    mysql

@@ -28,7 +28,8 @@ chmod +x wp-cli.phar
     --title=$WP_SITE_TITLE \
     --admin_user=$WP_DB_USER \
     --admin_password=$WP_DB_PASSWORD \
-    --admin_email=$WP_ADMIN_EMAIL
+    --admin_email=$WP_ADMIN_EMAIL \
+    --skip-email
 
 # launch php-fpm
 php-fpm8
