@@ -1,19 +1,3 @@
-# COLORS
-################################################################################
-ifneq (,$(findstring xterm,${TERM}))
-	RED          := $(shell tput -Txterm setaf 1)
-	GREEN        := $(shell tput -Txterm setaf 2)
-	YELLOW       := $(shell tput -Txterm setaf 3)
-	BLUE         := $(shell tput -Txterm setaf 6)
-	RESET		 := $(shell tput -Txterm sgr0)
-else
-	RED          := ""
-	GREEN        := ""
-	YELLOW       := ""
-	BLUE         := ""
-	RESET        := ""
-endif
-
 # COMMANDS
 ################################################################################
 RM              = rm -f
@@ -36,13 +20,12 @@ HOSTS			= /etc/hosts
 
 # EXECUTABLES & LIBRARIES
 ################################################################################
-NAME			= my_app
+NAME			= .done
 
 # DIRECTORIES
 ################################################################################
 SRCS			= ./srcs
 DATABIND		= /home/twagner/data
-BINDDIR_EXISTS	= $(shell [ -d .$(DATABIND) ] && echo 1 || echo 0 )
 
 # FLAGS
 ################################################################################
@@ -50,7 +33,7 @@ FLAGENV			= --env-file
 FLAGFILE		= -f
 UP				= up -d
 DOWN			= down
-REMOVEIMGS		= --rmi all --remove-orphans
+REMOVEALL		= --rmi all --remove-orphans -v
 
 # DNS
 ################################################################################
@@ -65,46 +48,48 @@ GID				= $(shell id -g ${USER})
 
 # RULES
 ################################################################################
-$(NAME):	
+$(NAME):		
+				@touch $(NAME)
+
+.PHONY:			all
+all:			
+				# Create bind folders only if they don't already exists
+				sudo $(MKDIR) -p $(DATABIND)
+				sudo $(MKDIR) -p $(DATABIND)/wordpress
+				sudo $(MKDIR) -p $(DATABIND)/db
+				# Update /etc/hosts file to map 127.0.0.1 with dns
 ifeq ($(HOST_UPDATED), 0)
-				@printf "$(BLUE)Updating : $(RESET) $(YELLOW)[Hosts]$(RESET)" 
-				@sudo $(CHMOD) 777 $(HOSTS)
-				@sudo $(ECHO) "$(ADDRESS) twagner.42.fr" >> $(HOSTS)
-				@sudo $(TOUCH) .host_updated
-				@echo " : $(GREEN)OK !$(RESET)"
+				sudo $(CHMOD) 777 $(HOSTS)
+				sudo $(ECHO) "$(ADDRESS) twagner.42.fr" >> $(HOSTS)
+				sudo $(TOUCH) .host_updated
 endif
-ifeq ($(BINDDIR_EXISTS), 0)
-				@printf "$(BLUE)Creating : $(RESET) $(YELLOW)[Bind dir]$(RESET)" 
-				@sudo $(MKDIR) $(DATABIND)
-				@sudo $(MKDIR) $(DATABIND)/wordpress
-				@sudo $(MKDIR) $(DATABIND)/db
-				@echo " : $(GREEN)OK !$(RESET)"
-endif
-				@printf "$(BLUE)Updating : $(RESET) $(YELLOW)[UID/GID]$(RESET)" 
-				@sudo $(REPLACE) "s|.*USER_ID.*|USER_ID=$(UID)|g" \
+				# Update .env file
+				sudo $(REPLACE) "s|.*USER_ID.*|USER_ID=$(UID)|g" \
 					  $(SRCS)/$(ENVFILE)
-				@sudo $(REPLACE) "s|.*GROUP_ID.*|GROUP_ID=$(GID)|g" \
+				sudo $(REPLACE) "s|.*GROUP_ID.*|GROUP_ID=$(GID)|g" \
 				      $(SRCS)/$(ENVFILE)
-				@echo "  : $(GREEN)OK !$(RESET)"
-
-				@echo "$(BLUE)Starting : $(RESET) $(YELLOW)[Containers]$(RESET)" 
+				# Build images and run containers
 				$(CD) $(SRCS) && $(DCOMPOSE) $(FLAGENV) $(ENVFILE) $(UP)
+				
 
-all:			$(NAME)
-
+.PHONY:			clean
 clean:
-				@echo "$(BLUE)Stopping : $(RESET) $(YELLOW)[Containers]$(RESET)" 
-				$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN) $(REMOVEIMGS)
+				# Clean all : stops containers and remove images + volumes
+				$(CD) $(SRCS) && $(DCOMPOSE) $(DOWN) $(REMOVEALL)
+				$(RM) .done
 
+.PHONY:			fclean
 fclean:			clean
+				# Clean all : stops containers, remove images, volumes, network
 				$(DOCKER) system prune --all --force --volumes
 				$(DOCKER) network prune --force
 				$(DOCKER) volume prune --force
 				$(DOCKER) image prune --force
-				@printf "$(BLUE)Removing : $(RESET) $(YELLOW)[Bind dir]$(RESET)" 
-				@sudo $(RMRF) $(DATABIND)
-				@echo " : $(GREEN)OK !$(RESET)"
 
+.PHONY:			bindclean
+bindclean:		
+				# Remove binded folders and data in them
+				sudo $(RMRF) $(DATABIND)
+
+.PHONY:			re
 re:				fclean all
-
-.PHONY:			all clean fclean re

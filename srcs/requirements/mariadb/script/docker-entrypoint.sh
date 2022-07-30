@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# create a verif to launch only on setup
+# patch mysql install db for auth pam rule
+
 
 # install system databases
 mysql_install_db --user=mysql --datadir=/var/lib/mysql

@@ -16,6 +16,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
             mariadb-common \
             mariadb-client \
             shadow \
+            patch \
  &&     rm -f /var/cache/apk/* \
 \
 # modify rights + creating folder for mysql pid and socket
@@ -44,6 +45,7 @@ EXPOSE  3306
 
 COPY    script/docker-entrypoint.sh /usr/local/bin/
 COPY    conf/db_config.sql          /tmp/mysql
+#COPY    conf/patch_auth.sql         /tmp/mysql
 
 # launch command as non root
 USER    mysql
