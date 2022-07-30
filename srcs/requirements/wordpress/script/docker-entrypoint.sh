@@ -19,9 +19,6 @@ chmod +x wp-cli.phar
     --dbcharset=$WP_DB_CHARSET \
     --dbcollate=$WP_DB_COLLATE \
 
-# add an option to make https working
-
-
 # create wordpress database
 ./wp-cli.phar db create
 
@@ -33,6 +30,9 @@ chmod +x wp-cli.phar
     --admin_password=$WP_DB_PASSWORD \
     --admin_email=$WP_ADMIN_EMAIL \
     --skip-email
+
+# add a theme
+./wp-cli.phar theme install twentytwenty --activate
 
 # launch php-fpm
 php-fpm8

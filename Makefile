@@ -78,7 +78,7 @@ clean:
 				$(RM) .done
 
 .PHONY:			fclean
-fclean:			clean
+fclean:			clean cleanbinds
 				# Clean all : stops containers, remove images, volumes, network
 				$(DOCKER) system prune --all --force --volumes
 				$(DOCKER) network prune --force
