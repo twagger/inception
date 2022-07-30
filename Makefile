@@ -12,7 +12,7 @@ ECHO			= echo
 TOUCH			= touch
 CHMOD			= chmod
 AWK				= awk
-cat				= cat
+CAT				= cat
 
 # SOURCES
 ################################################################################
@@ -93,6 +93,7 @@ cleanbinds:
 .PHONY:			cleanhosts
 cleanhosts:		
 				# Remove the additionnal line from /etc/hosts and restore rights
+				touch .tmp
 				$(AWK) '!/$(DOMAINNAME)/' $(HOSTS) > .tmp \
 					&& $(CAT) .tmp > $(HOSTS) \
 					&& $(RM) .tmp
