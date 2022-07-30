@@ -19,6 +19,9 @@ chmod +x wp-cli.phar
     --dbcharset=$WP_DB_CHARSET \
     --dbcollate=$WP_DB_COLLATE \
 
+# add an option to make https working
+
+
 # create wordpress database
 ./wp-cli.phar db create
 

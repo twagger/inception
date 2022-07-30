@@ -37,8 +37,7 @@ REMOVEALL		= --rmi all --remove-orphans -v
 
 # DNS
 ################################################################################
-ADDRESS			= 34.173.196.190
-LOCADDRESS		= 10.128.0.5 
+ADDRESS			= 127.0.0.1
 HOST_UPDATED	= $(shell [ -e .host_updated ] && echo 1 || echo 0 )
 
 # USER & GROUP
@@ -54,20 +53,18 @@ $(NAME):
 .PHONY:			all
 all:			
 				# Create bind folders only if they don't already exists
-				sudo $(MKDIR) -p $(DATABIND)
-				sudo $(MKDIR) -p $(DATABIND)/wordpress
-				sudo $(MKDIR) -p $(DATABIND)/db
+				$(MKDIR) -p $(DATABIND)
+				$(MKDIR) -p $(DATABIND)/wordpress
+				$(MKDIR) -p $(DATABIND)/db
 				# Update /etc/hosts file to map 127.0.0.1 with dns
 ifeq ($(HOST_UPDATED), 0)
-				sudo $(CHMOD) 777 $(HOSTS)
-				sudo $(ECHO) "$(ADDRESS) twagner.42.fr" >> $(HOSTS)
-				sudo $(TOUCH) .host_updated
+				sudo $(CHMOD) 646 $(HOSTS)
+				$(ECHO) "$(ADDRESS) twagner.42.fr" >> $(HOSTS)
+				$(TOUCH) .host_updated
 endif
 				# Update .env file
-				sudo $(REPLACE) "s|.*USER_ID.*|USER_ID=$(UID)|g" \
-					  $(SRCS)/$(ENVFILE)
-				sudo $(REPLACE) "s|.*GROUP_ID.*|GROUP_ID=$(GID)|g" \
-				      $(SRCS)/$(ENVFILE)
+				$(REPLACE) "s|.*USER_ID.*|USER_ID=$(UID)|g" $(SRCS)/$(ENVFILE)
+				$(REPLACE) "s|.*GROUP_ID.*|GROUP_ID=$(GID)|g" $(SRCS)/$(ENVFILE)
 				# Build images and run containers
 				$(CD) $(SRCS) && $(DCOMPOSE) $(FLAGENV) $(ENVFILE) $(UP)	
 
@@ -85,10 +82,17 @@ fclean:			clean
 				$(DOCKER) volume prune --force
 				$(DOCKER) image prune --force
 
-.PHONY:			cleanbind
-cleanbind:		
+.PHONY:			cleanbinds
+cleanbinds:		
 				# Remove binded folders and data in them
-				sudo $(RMRF) $(DATABIND)
+				$(RMRF) $(DATABIND)
+
+.PHONY:			cleanhosts
+cleanhosts:		
+				# Remove the additionnal line from /etc/hosts and restore rights
+				sed -i "s|^$(ADDRESS) twagner.42.fr||"
+				sudo $(CHMOD) 644 $(HOSTS)
+				$(RM) .host_updated
 
 .PHONY:			re
 re:				fclean all
