@@ -11,6 +11,8 @@ REPLACE			= sed -i
 ECHO			= echo
 TOUCH			= touch
 CHMOD			= chmod
+AWK				= awk
+cat				= cat
 
 # SOURCES
 ################################################################################
@@ -38,6 +40,7 @@ REMOVEALL		= --rmi all --remove-orphans -v
 # DNS
 ################################################################################
 ADDRESS			= 127.0.0.1
+DOMAINNAME		= twagner.42.fr
 HOST_UPDATED	= $(shell [ -e .host_updated ] && echo 1 || echo 0 )
 
 # USER & GROUP
@@ -59,7 +62,7 @@ all:
 				# Update /etc/hosts file to map 127.0.0.1 with dns
 ifeq ($(HOST_UPDATED), 0)
 				sudo $(CHMOD) 646 $(HOSTS)
-				$(ECHO) "$(ADDRESS) twagner.42.fr" >> $(HOSTS)
+				$(ECHO) "$(ADDRESS) $(DOMAINNAME)" >> $(HOSTS)
 				$(TOUCH) .host_updated
 endif
 				# Update .env file
@@ -90,7 +93,9 @@ cleanbinds:
 .PHONY:			cleanhosts
 cleanhosts:		
 				# Remove the additionnal line from /etc/hosts and restore rights
-				sed -i "s|^$(ADDRESS) twagner.42.fr||"
+				$(AWK) '!/$(DOMAINNAME)/' $(HOSTS) > .tmp \
+					&& $(CAT) .tmp > $(HOSTS) \
+					&& $(RM) .tmp
 				sudo $(CHMOD) 644 $(HOSTS)
 				$(RM) .host_updated
 
