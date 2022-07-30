@@ -93,7 +93,7 @@ cleanbinds:
 .PHONY:			cleanhosts
 cleanhosts:		
 				# Remove the additionnal line from /etc/hosts and restore rights
-				touch .tmp
+				sudo $(CHMOD) 646 $(HOSTS)
 				$(AWK) '!/$(DOMAINNAME)/' $(HOSTS) > .tmp \
 					&& $(CAT) .tmp > $(HOSTS) \
 					&& $(RM) .tmp
