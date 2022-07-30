@@ -1,0 +1,22 @@
+--- srcs/requirements/mariadb/conf/mysql_install_db	2022-07-23 21:24:28.926195084 +0200
++++ "srcs/requirements/mariadb/conf/mysql_install_db copy"	2022-07-23 21:26:55.592195092 +0200
+@@ -493,13 +493,16 @@
+ then
+   if test -z "$srcdir" -a "$in_rpm" -eq 0
+   then
+-    chown 0 "$pamtooldir/auth_pam_tool_dir/auth_pam_tool" && \
+-    chmod 04755 "$pamtooldir/auth_pam_tool_dir/auth_pam_tool"
+-    if test $? -ne 0
++    if [ `stat "$pamtooldir/auth_pam_tool_dir/auth_pam_tool" -c %u` -ne 0 ]
+     then
++      chown 0 "$pamtooldir/auth_pam_tool_dir/auth_pam_tool" && \
++      chmod 04755 "$pamtooldir/auth_pam_tool_dir/auth_pam_tool"
++      if test $? -ne 0
++      then
+         echo "Couldn't set an owner to '$pamtooldir/auth_pam_tool_dir/auth_pam_tool'."
+         echo "It must be root, the PAM authentication plugin doesn't work otherwise.."
+         echo
++      fi
+     fi
+     chown $user "$pamtooldir/auth_pam_tool_dir" && \
+     chmod 0700 "$pamtooldir/auth_pam_tool_dir"

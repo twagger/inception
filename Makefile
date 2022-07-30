@@ -69,8 +69,7 @@ endif
 				sudo $(REPLACE) "s|.*GROUP_ID.*|GROUP_ID=$(GID)|g" \
 				      $(SRCS)/$(ENVFILE)
 				# Build images and run containers
-				$(CD) $(SRCS) && $(DCOMPOSE) $(FLAGENV) $(ENVFILE) $(UP)
-				
+				$(CD) $(SRCS) && $(DCOMPOSE) $(FLAGENV) $(ENVFILE) $(UP)	
 
 .PHONY:			clean
 clean:
@@ -86,8 +85,8 @@ fclean:			clean
 				$(DOCKER) volume prune --force
 				$(DOCKER) image prune --force
 
-.PHONY:			bindclean
-bindclean:		
+.PHONY:			cleanbind
+cleanbind:		
 				# Remove binded folders and data in them
 				sudo $(RMRF) $(DATABIND)
 
