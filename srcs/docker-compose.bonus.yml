@@ -69,6 +69,19 @@ services:
     volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
+  redis:
+    image: redis:${TAG}
+    build: 
+      context: ./bonus/redis
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
+    container_name: redis
+    domainname: ${DOMAIN_NAME}
+    restart: always
+    ports: ['6379:6379']
+    networks: ['inception_network']
+
 networks:
   inception_network:
     name: inception_network

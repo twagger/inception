@@ -4,13 +4,14 @@ This project is about using Docker and Docker compose to create a small multi-co
 
 # Table of Contents
 1. [Docker](#docker)
+   - [Docker network](#docker-network)
 2. [Docker compose](#docker-compose)
 3. [Bonuses](#Bonuses)
-        - [Redis cache](#redis-cache)
-        - [SFTP Server](#sftp-server)
-        - [Static website](#static-website)
-        - [Adminer](#adminer)
-        - [XXX service](#xxx-service)
+   - [Redis cache](#redis-cache)
+   - [SFTP Server](#sftp-server)
+   - [Static website](#static-website)
+   - [Adminer](#adminer)
+   - [XXX service](#xxx-service)
 4. [Installation](#installation)
 
 # Inception
@@ -18,6 +19,20 @@ This project is about using Docker and Docker compose to create a small multi-co
 ## Docker
 
 Docker is a set of platform as a service (PaaS) products that use OS-level virtualization to deliver software in packages called containers. The software that hosts the containers is called Docker Engine.
+
+### Docker network
+
+Docker documentation says :
+>In terms of Docker, a **bridge network** uses a software bridge which allows containers connected to the same bridge network to communicate, while providing isolation from containers which are not connected to that bridge network. The Docker bridge driver automatically installs rules in the host machine so that containers on different bridge networks cannot communicate directly with each other.
+>
+>Bridge networks apply to containers running **on the same Docker daemon host**.
+
+For this project, as it will run on a single Docker host and as I need different containers to communicate, I chose to use a **user-defined bridge network**.
+
+Unlike default bridge network, which is automatically created by Docker when you start new containers, user-defined bridge networks comes with some benefits :
+* Automatic DNS resolution between containers : you can directly reference a container to another using their names instead of --link flag
+* Better isolation : the containers are not attached to a default network where they can communicate with other unrelated containers
+* Containers on the same network share environment variables
 
 ## Docker compose
 

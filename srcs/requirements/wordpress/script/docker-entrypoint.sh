@@ -17,7 +17,7 @@ chmod +x wp-cli.phar
     --dbhost=$WP_DB_HOST \
     --dbprefix=$WP_TABLE_PREFIX \
     --dbcharset=$WP_DB_CHARSET \
-    --dbcollate=$WP_DB_COLLATE \
+    --dbcollate=$WP_DB_COLLATE
 
 # create wordpress database
 ./wp-cli.phar db create

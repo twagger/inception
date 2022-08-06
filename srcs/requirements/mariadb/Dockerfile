@@ -22,7 +22,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 # modify rights + creating folder for mysql pid and socket
  &&     usermod -u ${USER_ID} mysql \
  &&     groupmod -g ${GROUP_ID} mysql \
- &&     mkdir /run/mysqld /tmp/mysql \
+ &&     mkdir -p /run/mysqld /tmp/mysql \
  &&     chown -R mysql:mysql /etc/mysql /run/mysqld /var/lib/mysql \
         /usr/lib/mariadb /tmp/mysql /usr/bin/ \
 \

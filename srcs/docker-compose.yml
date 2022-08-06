@@ -70,6 +70,7 @@ services:
 
 networks:
   inception_network:
+    driver: bridge
     name: inception_network
 
 volumes:

@@ -17,10 +17,14 @@ chmod +x wp-cli.phar
     --dbhost=$WP_DB_HOST \
     --dbprefix=$WP_TABLE_PREFIX \
     --dbcharset=$WP_DB_CHARSET \
-    --dbcollate=$WP_DB_COLLATE \
+    --dbcollate=$WP_DB_COLLATE
 
 # create wordpress database
 ./wp-cli.phar db create
+
+# additionnal configuration for redis cache
+sed -i "s/.*WP_CACHE_KEY_SALT.*$/define\( 'WP_CACHE_KEY_SALT', 'twagner.42.fr' \);/" /var/www/wordpress/wp-config.php
+sed -i "s/\"stop editing\" line. \*\//&\ndefine( 'WP_REDIS_HOST', 'redis' );/" /var/www/wordpress/wp-config.php
 
 # install wordpress
 ./wp-cli.phar core install \
@@ -35,7 +39,7 @@ chmod +x wp-cli.phar
 ./wp-cli.phar theme install twentytwenty --activate
 
 # activate redis cache plugin
-./wp-cli.phar plugin activate redis-cache
+./wp-cli.phar plugin install redis-cache --activate
 ./wp-cli.phar redis enable
 
 # launch php-fpm

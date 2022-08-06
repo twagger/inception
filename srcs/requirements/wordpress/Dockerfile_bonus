@@ -29,11 +29,11 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     useradd www-data -g www-data \
  &&     usermod -u ${USER_ID} www-data \
  &&     groupmod -g ${GROUP_ID} www-data \
- &&     mkdir /home/www-data \
+ &&     mkdir -p /home/www-data \
  &&     chown -R www-data:www-data /home/www-data
 
 # make www dir and adjust rights
-RUN     mkdir /var/www /var/www/wordpress \
+RUN     mkdir -p /var/www/wordpress \
  &&     chown -R www-data:www-data /var/www
 
 # configure PHP
