@@ -1,52 +1,52 @@
 # COMMANDS
 ################################################################################
-RM              = rm -f
-RMRF			= rm -rf
-CD				= cd
-MKDIR			= mkdir
-DOCKER			= docker
-DOCKERIMG		= docker image
-DCOMPOSE		= docker compose
-REPLACE			= sed -i
-ECHO			= echo
-TOUCH			= touch
-CHMOD			= chmod
-AWK				= awk
-CAT				= cat
+RM              := rm -f
+RMRF			:= rm -rf
+CD				:= cd
+MKDIR			:= mkdir
+DOCKER			:= docker
+DOCKERIMG		:= docker image
+DCOMPOSE		:= docker compose
+REPLACE			:= sed -i
+ECHO			:= echo
+TOUCH			:= touch
+CHMOD			:= chmod
+AWK				:= awk
+CAT				:= cat
 
 # SOURCES
 ################################################################################
-ENVFILE			= .env
-DCOMPOSEDEV		= docker-compose.yml
-HOSTS			= /etc/hosts
+ENVFILE			:= .env
+HOSTS			:= /etc/hosts
+DCOMPOSEFILE	= docker-compose.yml
 
 # EXECUTABLES & LIBRARIES
 ################################################################################
-NAME			= .done
+NAME			:= .done
 
 # DIRECTORIES
 ################################################################################
-SRCS			= ./srcs
-DATABIND		= /home/twagner/data
+SRCS			:= ./srcs
+DATABIND		:= /home/twagner/data
 
 # FLAGS
 ################################################################################
-FLAGENV			= --env-file
-FLAGFILE		= -f
-UP				= up -d
-DOWN			= down
-REMOVEALL		= --rmi all --remove-orphans -v
+FLAGENV			:= --env-file
+FLAGFILE		:= -f
+UP				:= up -d
+DOWN			:= down
+REMOVEALL		:= --rmi all --remove-orphans -v
 
 # DNS
 ################################################################################
-ADDRESS			= 127.0.0.1
-DOMAINNAME		= twagner.42.fr
+ADDRESS			:= 127.0.0.1
+DOMAINNAME		:= twagner.42.fr
 HOST_UPDATED	= $(shell [ -e .host_updated ] && echo 1 || echo 0 )
 
 # USER & GROUP
 ################################################################################
-UID				= $(shell id -u ${USER})
-GID				= $(shell id -g ${USER})
+UID				:= $(shell id -u ${USER})
+GID				:= $(shell id -g ${USER})
 
 # RULES
 ################################################################################
@@ -69,7 +69,7 @@ endif
 				$(REPLACE) "s|.*USER_ID.*|USER_ID=$(UID)|g" $(SRCS)/$(ENVFILE)
 				$(REPLACE) "s|.*GROUP_ID.*|GROUP_ID=$(GID)|g" $(SRCS)/$(ENVFILE)
 				# Build images and run containers
-				$(CD) $(SRCS) && $(DCOMPOSE) $(FLAGENV) $(ENVFILE) $(UP)	
+				$(CD) $(SRCS) && $(DCOMPOSE) -f $(DCOMPOSEFILE) $(FLAGENV) $(ENVFILE) $(UP)	
 
 .PHONY:			clean
 clean:
@@ -99,6 +99,10 @@ cleanhosts:
 					&& $(RM) .tmp
 				sudo $(CHMOD) 644 $(HOSTS)
 				$(RM) .host_updated
+
+.PHONY:			bonus
+bonus:			DCOMPOSEFILE = docker-compose.bonus.yml
+bonus:			all
 
 .PHONY:			re
 re:				fclean all

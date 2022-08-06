@@ -1,6 +1,6 @@
 # Welcome to inception 🐋
 
-This project is about using Docker and Docker compose to create a small infrastructure for a Wordpress website, with php-fmp and nginx.
+This project is about using Docker and Docker compose to create a small multi-containers application with a wordpress website, running with php-fmp, nginx and mariadb.
 
 # Table of Contents
 1. [Docker](#docker)
