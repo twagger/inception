@@ -31,18 +31,25 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 		    -nodes \
 		    -subj /CN=twagner.42.fr \
 \
+# create subdir for server confs
+ &&		mkdir -p /etc/nginx/conf.d \
+\
 # create the user and group and directory for pages on the container
  &&     useradd www-data -g www-data \
  &&     usermod -u ${USER_ID} www-data \
  &&     groupmod -g ${GROUP_ID} www-data \
- &&     chown -R www-data:www-data /var/www/wordpress \
+\
+# adjust directories rights
+ &&     chown -R www-data:www-data /var/www/wordpress /etc/nginx/conf.d \
 \
 # correct rights for user that will launch the CMD
  &&     chown -R nginx /var/lib/nginx \
  &&     chown -R nginx /etc/nginx
 
 # copy the conf file to the container
-COPY    conf/nginx.bonus.conf /etc/nginx/nginx.conf
+COPY    conf/nginx.conf /etc/nginx
+COPY    conf/wordpress.conf /etc/nginx/conf.d
+COPY    conf/adminer.conf /etc/nginx/conf.d
 
 EXPOSE  443
 
