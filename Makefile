@@ -6,7 +6,8 @@ CD				:= cd
 MKDIR			:= mkdir
 DOCKER			:= docker
 DOCKERIMG		:= docker image
-DCOMPOSE		:= docker compose
+#DCOMPOSE		:= docker compose
+DCOMPOSE		:= docker-compose
 REPLACE			:= sed -i
 ECHO			:= echo
 TOUCH			:= touch
@@ -27,7 +28,8 @@ NAME			:= .done
 # DIRECTORIES
 ################################################################################
 SRCS			:= ./srcs
-DATABIND		:= /home/twagner/data
+#DATABIND		:= /home/twagner/data
+DATABIND		:= /sgoinfre/goinfre/Perso/twagner/Inception/data
 
 # FLAGS
 ################################################################################
@@ -42,6 +44,10 @@ REMOVEALL		:= --rmi all --remove-orphans -v
 ADDRESS			:= 127.0.0.1
 DOMAINNAME		:= twagner.42.fr
 HOST_UPDATED	= $(shell [ -e .host_updated ] && echo 1 || echo 0 )
+
+ifeq ($(NOHOSTUPDATE), true)
+	HOST_UPDATED	= 1
+endif
 
 # USER & GROUP
 ################################################################################
@@ -68,6 +74,7 @@ endif
 				# Update .env file
 				$(REPLACE) "s|.*USER_ID.*|USER_ID=$(UID)|g" $(SRCS)/$(ENVFILE)
 				$(REPLACE) "s|.*GROUP_ID.*|GROUP_ID=$(GID)|g" $(SRCS)/$(ENVFILE)
+				$(REPLACE) "s|.*DATABIND=.*|DATABIND=$(DATABIND)|g" $(SRCS)/$(ENVFILE)
 				# Build images and run containers
 				$(CD) $(SRCS) && $(DCOMPOSE) -f $(DCOMPOSEFILE) $(FLAGENV) $(ENVFILE) $(UP)	
 

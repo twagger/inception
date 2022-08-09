@@ -76,13 +76,13 @@ volumes:
   wordpress_data:
     driver: local
     driver_opts:
-      device: /home/twagner/data/wordpress
+      device: ${DATABIND}/wordpress
       type: volume
       o: bind
     
   db_data:
     driver: local
     driver_opts:
-      device: /home/twagner/data/db
+      device: ${DATABIND}/db
       type: volume
       o: bind
