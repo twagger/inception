@@ -27,7 +27,9 @@ NAME			:= .done
 # DIRECTORIES
 ################################################################################
 SRCS			:= ./srcs
-DATABIND		:= /home/twagner/data
+#DATABIND		:= /home/twagner/data
+DATABIND		:= /home/tom/data
+MKBINDS			= $(MKDIR) -p $(DATABIND) $(DATABIND)/wordpress $(DATABIND)/db
 
 # FLAGS
 ################################################################################
@@ -60,9 +62,7 @@ $(NAME):
 .PHONY:			all
 all:			
 				# Create bind folders only if they don't already exists
-				$(MKDIR) -p $(DATABIND)
-				$(MKDIR) -p $(DATABIND)/wordpress
-				$(MKDIR) -p $(DATABIND)/db
+				$(MKBINDS)
 				# Update /etc/hosts file to map 127.0.0.1 with dns
 ifeq ($(HOST_UPDATED), 0)
 				sudo $(CHMOD) 646 $(HOSTS)
@@ -108,6 +108,7 @@ cleanhosts:
 .PHONY:			bonus
 bonus:			DCOMPOSEFILE = docker-compose.bonus.yml
 bonus:			ENVFILE = .env.bonus
+bonus:			MKBINDS += $(DATABIND)/adminer
 bonus:			all
 
 .PHONY:			re
