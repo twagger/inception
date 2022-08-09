@@ -9,8 +9,6 @@ LABEL   org.opencontainers.image.version=0.1.0
 # args for proper user rights management
 ARG     USER_ID=${USER_ID}
 ARG     GROUP_ID=${GROUP_ID}
-ARG     FTPUSER=${FTPUSER}
-ARG     FTPPASS=${FTPPASS}
 
 # add specific user and group with current host userid and groupid to run the process
 RUN     addgroup -S -g ${GROUP_ID} vsftp \
@@ -31,11 +29,10 @@ RUN     addgroup -S -g ${GROUP_ID} vsftp \
  &&     chown vsftp:vsftp /var/log/vsftpd.log
 
 # copy configuration file
-COPY    conf/vsftpd.conf   /etc/vsftpd/
+COPY    conf/vsftpd.conf /etc/vsftpd/
 
-# root must own the configuration file
-RUN     chown -R vsftp:vsftp /etc/vsftpd \
- &&     chown -R vsftp:vsftp /proc/self/fd/1
+# launching user must own the configuration file
+RUN     chown -R vsftp:vsftp /etc/vsftpd
 
 EXPOSE  4242
 
@@ -43,4 +40,3 @@ EXPOSE  4242
 USER    vsftp
 
 CMD     ["vsftpd", "/etc/vsftpd/vsftpd.conf"]
-#CMD     ["tail", "-f", "/dev/null"]
