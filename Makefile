@@ -6,8 +6,7 @@ CD				:= cd
 MKDIR			:= mkdir
 DOCKER			:= docker
 DOCKERIMG		:= docker image
-#DCOMPOSE		:= docker compose
-DCOMPOSE		:= docker-compose
+DCOMPOSE		:= docker compose
 REPLACE			:= sed -i
 ECHO			:= echo
 TOUCH			:= touch
@@ -28,8 +27,7 @@ NAME			:= .done
 # DIRECTORIES
 ################################################################################
 SRCS			:= ./srcs
-#DATABIND		:= /home/twagner/data
-DATABIND		:= /mnt/nfs/homes/twagner/goinfre/data
+DATABIND		:= /home/twagner/data
 
 # FLAGS
 ################################################################################

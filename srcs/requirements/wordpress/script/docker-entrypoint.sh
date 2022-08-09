@@ -1,7 +1,5 @@
 #!/bin/sh
 
-cd /var/www/wordpress
-
 # download wp-cli
 wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar

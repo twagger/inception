@@ -10,6 +10,9 @@ LABEL   org.opencontainers.image.version=0.1.0
 ARG     USER_ID=${USER_ID}
 ARG     GROUP_ID=${GROUP_ID}
 
+# workdir
+WORKDIR /var/www/wordpress
+
 # install nginx and openssl and shadow (login and pass utilities) 
 RUN     apk update && apk upgrade && apk add --update --no-cache \
             nginx \
@@ -32,8 +35,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     useradd www-data -g www-data \
  &&     usermod -u ${USER_ID} www-data \
  &&     groupmod -g ${GROUP_ID} www-data \
- &&     mkdir -p /var/www/wordpress \
- &&     chown -R www-data:www-data /var/www \
+ &&     chown -R www-data:www-data /var/www/wordpress \
 \
 # correct rights for user that will launch the CMD
  &&     chown -R nginx /var/lib/nginx \

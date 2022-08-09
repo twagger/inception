@@ -10,6 +10,9 @@ LABEL   org.opencontainers.image.version=0.1.0
 ARG     USER_ID=${USER_ID}
 ARG     GROUP_ID=${GROUP_ID}
 
+# workdir
+WORKDIR /var/www/wordpress
+
 # add specific user and group with current host userid and groupid to run the process
 RUN     addgroup -S -g ${GROUP_ID} vsftp \
  &&     adduser -S -G vsftp -u ${USER_ID} vsftp \
@@ -20,13 +23,9 @@ RUN     addgroup -S -g ${GROUP_ID} vsftp \
             shadow \
  &&     rm -f /var/cache/apk/* \
 \
-# create directory for mapping volume
- &&     mkdir -p /var/www/wordpress \
- &&     chown -R vsftp:vsftp /var/www/wordpress \
-\
 # create and own log file
  &&     touch /var/log/vsftpd.log \
- &&     chown vsftp:vsftp /var/log/vsftpd.log
+ &&     chown vsftp:vsftp /var/log/vsftpd.log /var/www/wordpress
 
 # copy configuration file
 COPY    conf/vsftpd.conf /etc/vsftpd/
