@@ -29,7 +29,7 @@ NAME			:= .done
 ################################################################################
 SRCS			:= ./srcs
 #DATABIND		:= /home/twagner/data
-DATABIND		:= /sgoinfre/goinfre/Perso/twagner/Inception/data
+DATABIND		:= /mnt/nfs/homes/twagner/goinfre/data
 
 # FLAGS
 ################################################################################

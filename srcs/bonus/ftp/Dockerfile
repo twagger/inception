@@ -34,7 +34,7 @@ COPY    conf/vsftpd.conf /etc/vsftpd/
 # launching user must own the configuration file
 RUN     chown -R vsftp:vsftp /etc/vsftpd
 
-EXPOSE  4242
+EXPOSE  7042
 
 # launch command as non root
 USER    vsftp
