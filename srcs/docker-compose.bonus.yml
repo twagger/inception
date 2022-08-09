@@ -18,10 +18,7 @@ services:
         condition: service_started
     restart: always
     ports: ['443:443']
-    volumes: [
-      'wordpress_data:/var/www/wordpress',
-      'adminer_data:/var/www/adminer'
-      ]
+    volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
   mariadb:
@@ -109,7 +106,7 @@ services:
     container_name: adminer
     restart: always
     ports: ['9042:9042']
-    volumes: ['adminer_data:/var/www/adminer']
+    volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
 networks:
@@ -130,10 +127,4 @@ volumes:
       device: ${DATABIND}/db
       type: volume
       o: bind
-  
-  adminer_data:
-    driver: local
-    driver_opts:
-      device: ${DATABIND}/adminer
-      type: volume
-      o: bind
+

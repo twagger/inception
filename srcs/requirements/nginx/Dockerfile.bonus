@@ -11,7 +11,7 @@ ARG     USER_ID=${USER_ID}
 ARG     GROUP_ID=${GROUP_ID}
 
 # workdir
-WORKDIR /var/www/wordpress
+WORKDIR /var/www
 
 # install nginx and openssl and shadow (login and pass utilities) 
 RUN     apk update && apk upgrade && apk add --update --no-cache \
@@ -40,7 +40,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     groupmod -g ${GROUP_ID} www-data \
 \
 # adjust directories rights
- &&     chown -R www-data:www-data /var/www/wordpress /etc/nginx/conf.d \
+ &&     chown -R www-data:www-data /var/www /etc/nginx/conf.d \
 \
 # correct rights for user that will launch the CMD
  &&     chown -R nginx /var/lib/nginx \
@@ -48,8 +48,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 
 # copy the conf file to the container
 COPY    conf/nginx.conf /etc/nginx
-COPY    conf/wordpress.conf /etc/nginx/conf.d
-COPY    conf/adminer.conf /etc/nginx/conf.d
+COPY    conf/www.conf /etc/nginx/conf.d
 
 EXPOSE  443
 

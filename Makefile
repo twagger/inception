@@ -67,6 +67,7 @@ all:
 ifeq ($(HOST_UPDATED), 0)
 				sudo $(CHMOD) 646 $(HOSTS)
 				$(ECHO) "$(ADDRESS) $(DOMAINNAME)" >> $(HOSTS)
+				$(ECHO) "$(ADDRESS) adminer.$(DOMAINNAME)" >> $(HOSTS)
 				$(TOUCH) .host_updated
 endif
 				# Update .env file
