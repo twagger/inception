@@ -13,7 +13,6 @@ services:
     depends_on:
       wordpress:
         condition: service_started
-    domainname: ${DOMAIN_NAME}
     restart: always
     ports: ['443:443']
     volumes: ['wordpress_data:/var/www/wordpress']

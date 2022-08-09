@@ -13,7 +13,6 @@ services:
     depends_on:
       wordpress:
         condition: service_started
-    domainname: ${DOMAIN_NAME}
     restart: always
     ports: ['443:443']
     volumes: ['wordpress_data:/var/www/wordpress']
@@ -77,9 +76,23 @@ services:
         - USER_ID=${USER_ID}
         - GROUP_ID=${GROUP_ID}
     container_name: redis
-    domainname: ${DOMAIN_NAME}
     restart: always
     ports: ['6379:6379']
+    networks: ['inception_network']
+
+  ftp:
+    image: ftp:${TAG}
+    build: 
+      context: ./bonus/ftp
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
+        - FTPUSER=${FTPUSER}
+        - FTPPASS=${FTPPASS}
+    container_name: ftp
+    restart: always
+    ports: ['4242:4242']
+    volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
 networks:

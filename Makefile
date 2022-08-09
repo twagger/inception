@@ -16,7 +16,7 @@ CAT				:= cat
 
 # SOURCES
 ################################################################################
-ENVFILE			:= .env
+ENVFILE			= .env
 HOSTS			:= /etc/hosts
 DCOMPOSEFILE	= docker-compose.yml
 
@@ -102,6 +102,7 @@ cleanhosts:
 
 .PHONY:			bonus
 bonus:			DCOMPOSEFILE = docker-compose.bonus.yml
+bonus:			ENVFILE = .env-bonus
 bonus:			all
 
 .PHONY:			re
