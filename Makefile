@@ -102,7 +102,7 @@ cleanhosts:
 
 .PHONY:			bonus
 bonus:			DCOMPOSEFILE = docker-compose.bonus.yml
-bonus:			ENVFILE = .env-bonus
+bonus:			ENVFILE = .env.bonus
 bonus:			all
 
 .PHONY:			re

@@ -32,13 +32,13 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 # get adminer on a specific folder
  &&     mkdir -p /var/www/adminer \
  &&     wget -O /var/www/adminer/index.php "https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php" \
- &&     chown -R adminer:adminer /var/www/adminer
+ &&     chown -R adminer:adminer /var/www
 
 # configure PHP
 COPY    conf/php-fpm.conf   /etc/php8/
 COPY    conf/www.conf       /etc/php8/php-fpm.d/
 
-EXPOSE  8080
+EXPOSE  9042
 
 # launch command as non root
 USER    adminer

@@ -6,6 +6,7 @@ services:
     image: nginx:${TAG}
     build: 
       context: ./requirements/nginx
+      dockerfile: Dockerfile.bonus
       args:
         - USER_ID=${USER_ID}
         - GROUP_ID=${GROUP_ID}
@@ -47,7 +48,7 @@ services:
         condition: service_healthy
     build:
       context: ./requirements/wordpress
-      dockerfile: Dockerfile_bonus
+      dockerfile: Dockerfile.bonus
       args:
         - USER_ID=${USER_ID}
         - GROUP_ID=${GROUP_ID}
@@ -102,7 +103,8 @@ services:
         - GROUP_ID=${GROUP_ID}
     container_name: adminer
     restart: always
-    ports: ['8080:8080']
+    ports: ['9042:9042']
+    volumes: ['wordpress_data:/var/www']
     networks: ['inception_network']
 
 networks:
