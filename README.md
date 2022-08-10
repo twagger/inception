@@ -58,13 +58,13 @@ Some interesting quotes from this article :
 >
 >Instead, the web server can check with Redis if it has the data it wants. So when another call is made and requires the same query transaction, instead of hitting the MySQL server again, the Redis object will serve the request from the object cache.
 
-### SFTP server
+### FTP server
 
-### Static website
+### Static website (using HUGO)
 
 ### Adminer
 
-### XXX service
+### xxx server
 
 ## Installation
 
