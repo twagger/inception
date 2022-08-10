@@ -25,11 +25,12 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     cd /var/hugo/me \
  &&     git clone https://github.com/vaga/hugo-theme-m10c themes/m10c \
  &&     hugo new posts/presentation.md \
- &&     hugo
+ &&     hugo -b https://twagner.42.fr/me
 
 # copy config and content files
 COPY    conf/config.toml        /var/hugo/me/config.toml
 COPY    conf/presentation.md    /var/hugo/me/content/posts/presentation.md
+COPY    conf/avatar.jpg         /var/hugo/me/themes/m10c/static/avatar.jpg
 
 EXPOSE  1313
 
@@ -37,4 +38,4 @@ EXPOSE  1313
 USER    root
 
 #CMD [ "tail", "-f", "/dev/null" ]
-CMD     ["hugo", "server", "--bind=0.0.0.0", "-p", "1313"]
+CMD     ["hugo", "server", "-v", "--bind=0.0.0.0", "-p", "1313", "--appendPort=false"]

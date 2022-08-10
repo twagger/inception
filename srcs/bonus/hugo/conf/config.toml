@@ -1,4 +1,26 @@
-baseURL = 'https://twagner.42.fr/me'
-languageCode = 'en-us'
-title = 'Thomas WAGNER'
+baseURL = "https://twagner.42.fr/me"
+title = "twagner's"
 theme = "m10c"
+paginate = 8
+canonifyURLs = true
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 2
+
+[params]
+  author = "Thomas WAGNER"
+  description = "Student @42Paris"
+  menu_item_separator = " - "
+  [[params.social]]
+    icon = "github"
+    name = "Github"
+    url = "https://github.com/twagger"
