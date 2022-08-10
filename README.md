@@ -40,7 +40,6 @@ Unlike default bridge network, which is automatically created by Docker when you
 * Better isolation : the containers are not attached to a default network where they can communicate with other unrelated containers
 * Containers on the same network share environment variables
 <br />
-<br />
 
 ## Docker compose
 
@@ -63,7 +62,6 @@ I used it especially to **run the instructions at runtime with a non root user**
 * As a root, you can do a lot of things without restrictions on your container. This is convenient, but a **malicious user can use your container to get a root access on the host**.
 * Finaly, using a non root user in your Dockerfile will **force you to understand and to manage properly the files and locations your application needs to access**. It is better if you are in a learning process.
 <br />
-<br />
 
 ### PORTS : binding host with containers in Docker-compose
 
@@ -84,7 +82,6 @@ It may seem like a good idea to bind the ports of your containers with the ports
 
 **BUT** in the context of a **multi-containers application**, we have to think carefully about what should be the entrypoint(s) of the application, and only expose these. In our case, we only want to **bind port 443 of the host with the port 443 of Nginx container**.
 <br />
-<br />
 
 ### Networks
 
@@ -102,7 +99,6 @@ network 2 : wordpress / mariadb
 ```
 
 In the docker-compose.yml file, nginx will only be on `network 1`, mariadb on `network 2` and wordpress on `network 1` and `network 2`.
-<br />
 <br />
 
 ## Bonuses
@@ -125,14 +121,12 @@ Some interesting quotes from this article :
 >
 >Instead, the web server can check with Redis if it has the data it wants. So when another call is made and requires the same query transaction, instead of hitting the MySQL server again, the Redis object will serve the request from the object cache.
 <br />
-<br />
 
 ### FTP server
 
 I chose to use [vsftpd](https://security.appspot.com/vsftpd.html) as it is easy to install and configure and it is very well documented online.
 
 Nothing special about this one, you can spend some time of course with the parameterization of rights, access and authentication but I chose not to.
-<br />
 <br />
 
 ### Static website (using HUGO)
