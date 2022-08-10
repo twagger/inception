@@ -41,6 +41,7 @@ Unlike default bridge network, which is automatically created by Docker when you
 * Containers on the same network share environment variables
 <br />
 <br />
+
 ## Docker compose
 
 Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
@@ -63,6 +64,7 @@ I used it especially to **run the instructions at runtime with a non root user**
 * Finaly, using a non root user in your Dockerfile will **force you to understand and to manage properly the files and locations your application needs to access**. It is better if you are in a learning process.
 <br />
 <br />
+
 ### PORTS : binding host with containers in Docker-compose
 
 ```yml
@@ -83,6 +85,7 @@ It may seem like a good idea to bind the ports of your containers with the ports
 **BUT** in the context of a **multi-containers application**, we have to think carefully about what should be the entrypoint(s) of the application, and only expose these. In our case, we only want to **bind port 443 of the host with the port 443 of Nginx container**.
 <br />
 <br />
+
 ### Networks
 
 Containers on the same network can communicate.
@@ -101,6 +104,7 @@ network 2 : wordpress / mariadb
 In the docker-compose.yml file, nginx will only be on `network 1`, mariadb on `network 2` and wordpress on `network 1` and `network 2`.
 <br />
 <br />
+
 ## Bonuses
 
 ### Redis cache
@@ -122,6 +126,7 @@ Some interesting quotes from this article :
 >Instead, the web server can check with Redis if it has the data it wants. So when another call is made and requires the same query transaction, instead of hitting the MySQL server again, the Redis object will serve the request from the object cache.
 <br />
 <br />
+
 ### FTP server
 
 I chose to use [vsftpd](https://security.appspot.com/vsftpd.html) as it is easy to install and configure and it is very well documented online.
@@ -129,6 +134,7 @@ I chose to use [vsftpd](https://security.appspot.com/vsftpd.html) as it is easy 
 Nothing special about this one, you can spend some time of course with the parameterization of rights, access and authentication but I chose not to.
 <br />
 <br />
+
 ### Static website (using HUGO)
 
 ### Adminer
