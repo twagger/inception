@@ -27,8 +27,7 @@ NAME			:= .done
 # DIRECTORIES
 ################################################################################
 SRCS			:= ./srcs
-#DATABIND		:= /home/twagner/data
-DATABIND		:= /home/tom/data
+DATABIND		:= /home/twagner/data
 MKBINDS			= $(MKDIR) -p $(DATABIND) $(DATABIND)/wordpress $(DATABIND)/db
 
 # FLAGS

@@ -44,7 +44,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 
 # copy the conf file to the container
 COPY    conf/nginx.conf /etc/nginx
-COPY    conf/wordpress.conf /etc/nginx/conf.d
+COPY    conf/www.conf /etc/nginx/conf.d
 
 EXPOSE  443
 

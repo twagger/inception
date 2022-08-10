@@ -36,7 +36,6 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
       start_period: 20s
-    ports: ['3306:3306']
     volumes: ['db_data:/var/lib/mysql']
     networks: ['inception_network']
 
@@ -63,7 +62,6 @@ services:
       - WP_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
     container_name: wordpress
     restart: always
-    ports: ['9000:9000']
     volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
@@ -75,6 +73,7 @@ networks:
 volumes:
   wordpress_data:
     driver: local
+    name: wordpress_data
     driver_opts:
       device: ${DATABIND}/wordpress
       type: volume
@@ -82,6 +81,7 @@ volumes:
     
   db_data:
     driver: local
+    name: db_data
     driver_opts:
       device: ${DATABIND}/db
       type: volume

@@ -39,7 +39,6 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
       start_period: 20s
-    ports: ['3306:3306']
     volumes: ['db_data:/var/lib/mysql']
     networks: ['inception_network']
 
@@ -67,7 +66,6 @@ services:
       - WP_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
     container_name: wordpress
     restart: always
-    ports: ['9000:9000']
     volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
@@ -80,7 +78,6 @@ services:
         - GROUP_ID=${GROUP_ID}
     container_name: redis
     restart: always
-    ports: ['6379:6379']
     networks: ['inception_network']
 
   ftp:
@@ -92,7 +89,6 @@ services:
         - GROUP_ID=${GROUP_ID}
     container_name: ftp
     restart: always
-    ports: ['7042:7042']
     volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
@@ -105,8 +101,18 @@ services:
         - GROUP_ID=${GROUP_ID}
     container_name: adminer
     restart: always
-    ports: ['9042:9042']
     volumes: ['wordpress_data:/var/www/wordpress']
+    networks: ['inception_network']
+  
+  hugo:
+    image: hugo:${TAG}
+    build: 
+      context: ./bonus/hugo
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
+    container_name: hugo
+    restart: always
     networks: ['inception_network']
 
 networks:
@@ -116,6 +122,7 @@ networks:
 volumes:
   wordpress_data:
     driver: local
+    name: wordpress_data
     driver_opts:
       device: ${DATABIND}/wordpress
       type: volume
@@ -123,6 +130,7 @@ volumes:
     
   db_data:
     driver: local
+    name: db_data
     driver_opts:
       device: ${DATABIND}/db
       type: volume
