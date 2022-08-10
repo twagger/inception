@@ -40,11 +40,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     groupmod -g ${GROUP_ID} www-data \
 \
 # adjust directories rights
- &&     chown -R www-data:www-data /var/www/wordpress /etc/nginx/conf.d \
-\
-# correct rights for user that will launch the CMD
- &&     chown -R nginx /var/lib/nginx \
- &&     chown -R nginx /etc/nginx
+ &&     chown -R www-data:www-data /var/www/wordpress /etc/nginx/conf.d
 
 # copy the conf file to the container
 COPY    conf/nginx.conf /etc/nginx

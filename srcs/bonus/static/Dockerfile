@@ -11,25 +11,14 @@ ARG     USER_ID=${USER_ID}
 ARG     GROUP_ID=${GROUP_ID}
 
 # workdir
-WORKDIR /var/www
+WORKDIR /var/www/me
 
-# install nginx and openssl and shadow (login and pass utilities) 
+# install nginx and hugo and shadow (login and pass utilities) 
 RUN     apk update && apk upgrade && apk add --update --no-cache \
             nginx \
-            openssl \
+            hugo \
             shadow \
  &&     rm -f /var/cache/apk/* \
-\
-# generate self signed certificate
- &&     mkdir /etc/nginx/certificates && \
-	    openssl req \
-		    -x509 \
-		    -newkey rsa:2048 \
-		    -keyout /etc/nginx/certificates/twagner.key \
-		    -days 365 \
-		    -out /etc/nginx/certificates/twagner.cert \
-		    -nodes \
-		    -subj /CN=twagner.42.fr \
 \
 # create subdir for server confs
  &&		mkdir -p /etc/nginx/conf.d \
@@ -39,14 +28,21 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     usermod -u ${USER_ID} www-data \
  &&     groupmod -g ${GROUP_ID} www-data \
 \
+# create new hugo site
+ &&     hugo new site /var/www/me \
+ &&
 # adjust directories rights
- &&     chown -R www-data:www-data /var/www /etc/nginx/conf.d
+ &&     chown -R www-data:www-data /var/www/me /etc/nginx/conf.d \
+\
+# correct rights for user that will launch the CMD
+ &&     chown -R nginx /var/lib/nginx \
+ &&     chown -R nginx /etc/nginx
 
 # copy the conf file to the container
 COPY    conf/nginx.conf /etc/nginx
-COPY    conf/www.conf /etc/nginx/conf.d
+COPY    conf/wordpress.conf /etc/nginx/conf.d
 
-EXPOSE  443
+EXPOSE  80
 
 # launch command as root : nginx will then use www-data
 USER    root
