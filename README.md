@@ -6,15 +6,21 @@ This project is about using Docker and Docker compose to create a small multi-co
 1. [Docker](#docker)
    - [Docker network](#docker-network)
 2. [Docker compose](#docker-compose)
+3. [Security](#security)
+4. [Tips and advices](#tips-and-advices)
 3. [Bonuses](#Bonuses)
    - [Redis cache](#redis-cache)
-   - [SFTP Server](#sftp-server)
-   - [Static website](#static-website)
+   - [FTP Server](#ftp-server)
+   - [Static website using HUGO](#static-website-using-hugo)
    - [Adminer](#adminer)
    - [XXX service](#xxx-service)
 4. [Installation](#installation)
 
 # Inception
+
+We need to build the following architecture with a certain set of constraints :
+
+![project architecture](img/architecture.png)
 
 ## Docker
 
@@ -37,6 +43,59 @@ Unlike default bridge network, which is automatically created by Docker when you
 ## Docker compose
 
 Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
+
+## Security
+
+### USER instruction in Dockerfile
+
+```Dockerfile
+USER    	www-data
+
+ENTRYPOINT 	["docker-entrypoint.sh"]
+```
+
+The **USER** instruction allows you to execute the remaining commands of the dockerfile with a certain user.
+
+I used it especially to **run the instructions at runtime with a non root user**, at the end of the Dockerfile. This is nice on multiple level :
+* If you have folders that are binded between the host machine and a container, **every file a root user will create in it will be difficult to manage on the host if you are not root**.
+* As a root, you can do a lot of things without restrictions on your container. This is convenient, but a **malicious user can use your container to get a root access on the host**.
+* Finaly, using a non root user in your Dockerfile will **force you to understand and to manage properly the files and locations your application needs to access**. It is better if you are in a learning process.
+
+### PORTS : binding host with containers in Docker-compose
+
+```yml
+ ftp:
+    image: ftp:${TAG}
+    build: ./bonus/ftp
+    container_name: ftp
+    restart: always
+    ports: ['2222:2222']
+    volumes: ['wordpress_data:/var/www/wordpress']
+    networks: ['inception_network']
+```
+
+Docker-compose allows you to **bind a port of your host machine with a port of a container**.
+
+It may seem like a good idea to bind the ports of your containers with the ports of your host, to have **easy access to them from the host**, for testing or monitoring the services.
+
+**BUT** in the context of a **multi-containers application**, we have to think carefully about what should be the entrypoint(s) of the application, and only expose these. In our case, we only want to **bind port 443 of the host with the port 443 of Nginx container**.
+
+### Networks
+
+Containers on the same network can communicate.
+
+If you need to secure a little bit more your multi-containers application, you can create **dedicated networks between certain containers instead of one big network for all containers**.
+
+For example, in this project, I need my Nginx container to communicate with the wordpress/php-fpm container, but not with mariadb directly.
+
+I could create multiple networks to allow communication between my containers :
+
+```txt
+network 1 : nginx / wordpress
+network 2 : wordpress / mariadb
+```
+
+In the docker-compose.yml file, nginx will only be on `network 1`, mariadb on `network 2` and wordpress on `network 1` and `network 2`.
 
 ## Bonuses
 
