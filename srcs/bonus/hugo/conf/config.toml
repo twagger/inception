@@ -2,6 +2,3 @@ baseURL = 'https://twagner.42.fr/me'
 languageCode = 'en-us'
 title = 'Thomas WAGNER'
 theme = "m10c"
-[Params]
-    author: Thomas WAGNER
-    description: Student @42Paris

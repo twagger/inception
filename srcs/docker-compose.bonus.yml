@@ -16,6 +16,8 @@ services:
         condition: service_healthy
       adminer:
         condition: service_healthy
+      hugo:
+          condition: service_healthy
     restart: always
     ports: ['443:443']
     volumes: ['wordpress_data:/var/www/wordpress']
@@ -119,6 +121,10 @@ services:
         - USER_ID=${USER_ID}
         - GROUP_ID=${GROUP_ID}
     container_name: hugo
+    healthcheck:
+      test: netstat -an | grep 1313 > /dev/null; if [ 0 != $$? ]; then exit 1; fi;
+      interval: 10s
+      start_period: 10s
     restart: always
     networks: ['inception_network']
 
