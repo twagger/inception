@@ -13,9 +13,9 @@ services:
     container_name: nginx
     depends_on:
       wordpress:
-        condition: service_started
+        condition: service_healthy
       adminer:
-        condition: service_started
+        condition: service_healthy
     restart: always
     ports: ['443:443']
     volumes: ['wordpress_data:/var/www/wordpress']
@@ -66,6 +66,9 @@ services:
       - WP_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
     container_name: wordpress
     restart: always
+    healthcheck:
+      test: netstat -an | grep 9000 > /dev/null; if [ 0 != $$? ]; then exit 1; fi;
+      start_period: 10s
     volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 
@@ -101,6 +104,10 @@ services:
         - GROUP_ID=${GROUP_ID}
     container_name: adminer
     restart: always
+    healthcheck:
+      test: netstat -an | grep 9042 > /dev/null; if [ 0 != $$? ]; then exit 1; fi;
+      interval: 10s
+      start_period: 10s
     volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
   
@@ -135,4 +142,3 @@ volumes:
       device: ${DATABIND}/db
       type: volume
       o: bind
-

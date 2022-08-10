@@ -24,11 +24,12 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     hugo new site /var/hugo/me \
  &&     cd /var/hugo/me \
  &&     git clone https://github.com/vaga/hugo-theme-m10c themes/m10c \
- &&     hugo new posts/my-first-post.md \
+ &&     hugo new posts/presentation.md \
  &&     hugo
 
 # copy config and content files
-COPY    conf/config.toml /var/hugo/me/config.toml
+COPY    conf/config.toml        /var/hugo/me/config.toml
+COPY    conf/presentation.md    /var/hugo/me/content/posts/presentation.md
 
 EXPOSE  1313
 
