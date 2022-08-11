@@ -107,8 +107,6 @@ cleanhosts:
 
 .PHONY:			bonus
 bonus:			DCOMPOSEFILE = docker-compose.bonus.yml
-bonus:			ENVFILE = .env.bonus
-bonus:			MKBINDS += $(DATABIND)/adminer
 bonus:			all
 
 .PHONY:			re

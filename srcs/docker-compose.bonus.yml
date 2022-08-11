@@ -5,8 +5,8 @@ services:
   nginx:
     image: nginx:${TAG}
     build: 
-      context: ./bonus/nginx
-      dockerfile: Dockerfile.bonus
+      context: ./
+      dockerfile: ./bonus/nginx/Dockerfile
       args:
         - USER_ID=${USER_ID}
         - GROUP_ID=${GROUP_ID}
@@ -50,8 +50,8 @@ services:
       mariadb:
         condition: service_healthy
     build:
-      context: ./bonus/wordpress
-      dockerfile: Dockerfile.bonus
+      context: ./
+      dockerfile: ./bonus/wordpress/Dockerfile
       args:
         - USER_ID=${USER_ID}
         - GROUP_ID=${GROUP_ID}

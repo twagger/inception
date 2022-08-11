@@ -36,15 +36,15 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     chown -R www-data:www-data /home/www-data /var/www/wordpress
 
 # configure PHP
-COPY    ../../requirements/wordpress/conf/php-fpm.conf   /etc/php8/
-COPY    ../../requirements/wordpress/conf/www.conf       /etc/php8/php-fpm.d/
+COPY    ./requirements/wordpress/conf/php-fpm.conf   /etc/php8/
+COPY    ./requirements/wordpress/conf/www.conf       /etc/php8/php-fpm.d/
 
 # copy entrypoint
-COPY    script/docker-entrypoint.bonus.sh /usr/local/bin/
+COPY    ./bonus/wordpress/script/docker-entrypoint.sh /usr/local/bin/
 
 EXPOSE  9000
 
 # launch command as non root
 USER    www-data
 
-ENTRYPOINT ["docker-entrypoint.bonus.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]

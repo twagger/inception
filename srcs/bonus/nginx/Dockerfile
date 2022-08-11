@@ -43,9 +43,9 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     chown -R www-data:www-data /var/www /etc/nginx/conf.d
 
 # copy the conf file to the container
-COPY    ../../requirements/conf/nginx.conf 	/etc/nginx
-COPY    conf/proxy_params 					/etc/nginx
-COPY    conf/www.conf 						/etc/nginx/conf.d/www.conf
+COPY    ./requirements/nginx/conf/nginx.conf	/etc/nginx
+COPY    ./bonus/nginx/conf/proxy_params			/etc/nginx
+COPY    ./bonus/nginx/conf/www.conf 			/etc/nginx/conf.d/www.conf
 
 EXPOSE  443
 
