@@ -29,8 +29,6 @@ services:
       - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     container_name: mariadb
     restart: always
     healthcheck:
@@ -51,8 +49,8 @@ services:
         - GROUP_ID=${GROUP_ID}
     environment: 
       - WP_DB_HOST=${WORDPRESS_DB_HOST}
-      - WP_DB_USER=${WORDPRESS_DB_USER}
-      - WP_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+      - WP_DB_ADM_USER=${WORDPRESS_DB_ADM_USER}
+      - WP_DB_ADM_PASSWORD=${WORDPRESS_DB_ADM_PASSWORD}
       - WP_DB_NAME=${WORDPRESS_DB_NAME}
       - WP_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX}
       - WP_DB_CHARSET=${WORDPRESS_DB_CHARSET}
@@ -60,6 +58,8 @@ services:
       - WP_SITE_URL=${WORDPRESS_SITE_URL}
       - WP_SITE_TITLE=${WORDPRESS_SITE_TITLE}
       - WP_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
+      - WP_DB_USER=${WORDPRESS_DB_USER}
+      - WP_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
     container_name: wordpress
     restart: always
     volumes: ['wordpress_data:/var/www/wordpress']
