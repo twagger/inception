@@ -8,8 +8,6 @@ We need to build the following architecture with a certain set of constraints :
 
 ## Basics
 
-[Docker](https://www.docker.com/) is a set of platform as a service (PaaS) products that use OS-level virtualization to deliver software in packages called containers. The software that hosts the containers is called Docker Engine.
-
 ### Docker network : what kind of network should I chose ?
 
 Docker documentation says :
@@ -24,9 +22,63 @@ Unlike default bridge network, which is automatically created by Docker when you
 * Better isolation : the containers are not attached to a default network where they can communicate with other unrelated containers
 * Containers on the same network share environment variables
 
-### Docker compose : run multi-container applications
+### Depend-on : Run your container 
 
-Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
+Docker-compose offers the possibility to condition thoffers the possibility of conditioning the start of a container to the status of another.
+
+```yml
+nginx:
+    image: nginx:${TAG}
+    build: ./requirements/nginx
+    container_name: nginx
+    depends_on:
+      wordpress:
+        condition: service_healthy
+      adminer:
+        condition: service_healthy
+      hugo:
+          condition: service_healthy
+    restart: always
+    ports: ['443:443']
+    volumes: ['wordpress_data:/var/www/wordpress']
+    networks: ['inception_network']
+```
+
+For example in this project, Nginx is forwarding php traffic to php-fpm services of wordpress and adminer, and proxying hugo server. In the configuration file of nginx, you have **references** to other containers :
+
+```conf
+...
+location            ~* \.php$ 
+    {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass    wordpress:9000;
+        fastcgi_index   index.php;
+        include         fastcgi_params;
+        fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param   SCRIPT_NAME     $fastcgi_script_name;
+    }
+...
+```
+
+if you launch the nginx container before the wordpress container has finished installing and starting, you will generate **errors** in the nginx container. In addition, your web server will be accessible but some sites will return `502 bad gateway` errors.
+
+### Healthcheck : Check that your container is ok
+
+To help knowing the status of your container, you can tell docker to launch a certain command to check its status.
+
+```yml
+healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      start_period: 20s
+```
+
+It is up to you to know which command will give you a status for your service. If the exit status of the command is equal to **0**, the docker considers your container `healthy`. It it is **1**, `not healthy`.
+
+For some services, you can find healthcheck command online. Below is a **usefull command to check if the port you chose for your service is listening** :
+
+```sh
+netstat -an | grep <your port> /dev/null; if [ 0 != $$? ]; then exit 1; fi;
+```
 
 ## Things that can help
 
@@ -99,7 +151,7 @@ network 2 : wordpress / mariadb
 
 In the docker-compose.yml file, nginx will only be on `network 1`, mariadb on `network 2` and wordpress on `network 1` and `network 2`.
 
-## Extra : Add more services the the application !
+## Bonus : Add more services the the application !
 
 ### Redis cache
 
