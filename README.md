@@ -18,9 +18,9 @@ Docker documentation says :
 For this project, as it will run on a single Docker host and as I need different containers to communicate, I chose to use a **user-defined bridge network**.
 
 Unlike default bridge network, which is automatically created by Docker when you start new containers, user-defined bridge networks comes with some benefits :
-* Automatic DNS resolution between containers : you can directly reference a container to another using their names instead of --link flag
-* Better isolation : the containers are not attached to a default network where they can communicate with other unrelated containers
-* Containers on the same network share environment variables
+* **Automatic DNS resolution** between containers : you can directly reference a container to another using their names instead of --link flag
+* **Better isolation** : the containers are not attached to a default network where they can communicate with other unrelated containers
+* Containers on the same network share **environment variables**
 
 ### Depend-on : Control startup and shutdown order in Compose 
 
@@ -203,15 +203,6 @@ Make to build the complete application (build images and run them) :
 ```sh
 $> make
 ```
-Make clean to stop the containers and remove all (images, networks, volumes) :
-```sh
-$> make clean
-```
-Make fclean to clean everything, including the data on host machine (make re includes a fclean) :
-```sh
-$> make fclean
-```
-
 To access the website, launch a browser and enter (you will have to bypass the security warning as the certificate is self-signed) :
 ```
 https://twagner.42.fr
