@@ -137,7 +137,6 @@ services:
         - GROUP_ID=${GROUP_ID}
     container_name: cadvisor
     volumes: ['/var/run/docker.sock:/var/run/docker.sock:rw']
-    #ports: ['8383:8080']
     restart: always
     networks: ['inception_network']
 

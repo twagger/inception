@@ -10,6 +10,10 @@ LABEL   org.opencontainers.image.version=0.1.0
 ARG     USER_ID=${USER_ID}
 ARG     GROUP_ID=${GROUP_ID}
 
+# add redis user and group with current host userid and groupid
+RUN     addgroup -S -g ${GROUP_ID} nginx \
+ &&     adduser -S -G nginx -u ${USER_ID} nginx
+
 # workdir
 WORKDIR /var/www/wordpress
 
@@ -34,21 +38,20 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 # create subdir for server confs
  &&		mkdir -p /etc/nginx/conf.d \
 \
-# create the user and group and directory for pages on the container
- &&     useradd www-data -g www-data \
- &&     usermod -u ${USER_ID} www-data \
- &&     groupmod -g ${GROUP_ID} www-data \
-\
-# adjust directories rights
- &&     chown -R www-data:www-data /var/www/wordpress /etc/nginx/conf.d
+# adjust directories rights to launch nginx as non root
+ &&     chown -R nginx:nginx \
+ 			/var/www/wordpress \
+			/etc/nginx/ \
+			/run/nginx \
+			/var/run/nginx
 
 # copy the conf file to the container
 COPY    conf/nginx.conf /etc/nginx
-COPY    conf/www.conf /etc/nginx/conf.d
+COPY    conf/www.conf 	/etc/nginx/conf.d
 
 EXPOSE  443
 
-# launch command as root : nginx will then use www-data
-USER    root
+# launch command as non root
+USER    nginx
 
 CMD     ["nginx", "-g", "daemon off;"]
