@@ -14,13 +14,21 @@ ARG     GROUP_ID=${GROUP_ID}
 RUN     addgroup -S -g ${GROUP_ID} cadvisor \
  &&     adduser -S -G cadvisor -u ${USER_ID} cadvisor \
 \
+# install dependencies needed by cadvisor 
+ &&     apk update && apk upgrade && apk add --update --no-cache \
+            libc6-compat \
+ &&     rm -f /var/cache/apk/* \
+\
+# create a directory to bind local docker daemon socket
+ &&     mkdir -p /var/run/docker \
+\
 # get cadvisor on a specific folder
- &&     wget -O usr/local/bin/cadvisor "https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64" \
- &&     chmod +x usr/local/bin/cadvisor
+ &&     wget -O /usr/local/bin/cadvisor "https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64" \
+ &&     chmod +x /usr/local/bin/cadvisor
 
-EXPOSE  6379
+EXPOSE  8080
 
 # launch command as non root
-USER    cadvisor
+#USER    cadvisor
 
 CMD     ["cadvisor", "-logtostderr"]
