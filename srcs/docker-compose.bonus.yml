@@ -5,7 +5,7 @@ services:
   nginx:
     image: nginx:${TAG}
     build: 
-      context: ./requirements/nginx
+      context: ./bonus/nginx
       dockerfile: Dockerfile.bonus
       args:
         - USER_ID=${USER_ID}
@@ -50,7 +50,7 @@ services:
       mariadb:
         condition: service_healthy
     build:
-      context: ./requirements/wordpress
+      context: ./bonus/wordpress
       dockerfile: Dockerfile.bonus
       args:
         - USER_ID=${USER_ID}
@@ -110,7 +110,6 @@ services:
       test: netstat -an | grep 9042 > /dev/null; if [ 0 != $$? ]; then exit 1; fi;
       interval: 10s
       start_period: 10s
-    volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
   
   hugo:

@@ -11,7 +11,7 @@ ARG     USER_ID=${USER_ID}
 ARG     GROUP_ID=${GROUP_ID}
 
 # workdir
-WORKDIR /var/www/wordpress
+WORKDIR /var/www/adminer
 
 # add specific user and group with current host userid and groupid to run the process
 RUN     addgroup -S -g ${GROUP_ID} adminer \
@@ -33,9 +33,8 @@ RUN     addgroup -S -g ${GROUP_ID} adminer \
  &&     ln -s /usr/bin/php8 /usr/bin/php \
 \
 # get adminer on a specific folder
- &&		mkdir -p adminer \
- &&     wget -O adminer/index.php "https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php" \
- &&     chown -R adminer:adminer /var/www/wordpress
+ &&     wget -O index.php "https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php" \
+ &&     chown -R adminer:adminer /var/www/adminer
 
 # configure PHP
 COPY    conf/php-fpm.conf   /etc/php8/
