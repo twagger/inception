@@ -36,7 +36,7 @@ sed -i "s/\"stop editing\" line. \*\//&\ndefine( 'WP_REDIS_HOST', 'redis' );/" /
 # add a non root user
 eval "echo \"$(cat /tmp/mysql/wp_db_user.sql)\"" > /tmp/mysql/import.sql
 mysql -h mariadb -u $WP_DB_ADM_USER --password=$WP_DB_ADM_PASSWORD < "/tmp/mysql/import.sql"
-rm -rf /tmp/mysql/db_config.sql /tmp/mysql/import.sql
+rm -rf /tmp/mysql/wp_db_user.sql /tmp/mysql/import.sql
 
 # add a theme
 ./wp-cli.phar theme install twentytwenty --activate

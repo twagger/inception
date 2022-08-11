@@ -13,8 +13,7 @@ ARG     GROUP_ID=${GROUP_ID}
 # workdir
 WORKDIR /var/www/wordpress
 
-# copy sql config script
-COPY    conf/wp_db_user.sql /tmp/mysql
+
 
 # install PHP from package manager and shadow (login and pass utilities)
 RUN     apk update && apk upgrade && apk add --update --no-cache \
@@ -39,12 +38,15 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
  &&     chown -R www-data:www-data /home/www-data /var/www/wordpress \
 \
 # add tmp/mysql folder to host a config file
- &&     mkdir -p /tmp/mysql \
- &&     chown -R www-data:www-data /tmp/mysql
+ &&     mkdir -p /tmp/mysql 
 
 # configure PHP
 COPY    conf/php-fpm.conf   /etc/php8/
 COPY    conf/www.conf       /etc/php8/php-fpm.d/
+
+# copy sql config script
+COPY    conf/wp_db_user.sql /tmp/mysql/
+RUN     chown -R www-data:www-data /tmp/mysql
 
 # copy entrypoint
 COPY    script/docker-entrypoint.sh /usr/local/bin/
