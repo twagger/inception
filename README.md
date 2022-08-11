@@ -22,7 +22,7 @@ Unlike default bridge network, which is automatically created by Docker when you
 * Better isolation : the containers are not attached to a default network where they can communicate with other unrelated containers
 * Containers on the same network share environment variables
 
-### Depend-on : Run your container 
+### Depend-on : Control startup and shutdown order in Compose 
 
 Docker-compose offers the possibility to condition thoffers the possibility of conditioning the start of a container to the status of another.
 
@@ -189,7 +189,7 @@ Nothing special about this one.
 
 If you seek to build a dedicated container for it, you should build another php-fpm container to process the php of Adminer and adapt `nginx.conf` so you process the php  traffic properly between this container and the wordpress one.
 
-### xxx server
+### cAdvisor
 
 ## Installation
 
