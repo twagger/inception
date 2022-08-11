@@ -38,7 +38,7 @@ RUN     apk update && apk upgrade && apk add --update --no-cache \
 # copy config and content files
 COPY    conf/config.toml        /var/hugo/me/config.toml
 COPY    conf/presentation.md    /var/hugo/me/content/posts/presentation.md
-COPY    conf/about.md    /var/hugo/me/content/posts/presentation.md
+COPY    conf/about.md           /var/hugo/me/content/about/index.md
 COPY    conf/avatar.jpg         /var/hugo/me/themes/m10c/static/avatar.jpg
 
 EXPOSE  1313
