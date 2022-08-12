@@ -43,7 +43,7 @@ COPY    ./requirements/wordpress/conf/php-fpm.conf   /etc/php8/
 COPY    ./requirements/wordpress/conf/www.conf       /etc/php8/php-fpm.d/
 
 # copy sql config script
-COPY    .bonus/wordpress/conf/wp_db_user.sql         /tmp/mysql/
+COPY    ./bonus/wordpress/conf/wp_db_user.sql        /tmp/mysql/
 RUN     chown -R www-data:www-data /tmp/mysql
 
 # copy entrypoint

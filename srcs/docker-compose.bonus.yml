@@ -94,6 +94,7 @@ services:
         - GROUP_ID=${GROUP_ID}
     container_name: ftp
     restart: always
+    ports: ['7042:7042']
     volumes: ['wordpress_data:/var/www/wordpress']
     networks: ['inception_network']
 

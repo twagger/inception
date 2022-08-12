@@ -29,6 +29,6 @@ RUN     addgroup -S -g ${GROUP_ID} cadvisor \
 EXPOSE  8080
 
 # launch command as non root
-#USER    cadvisor
+USER    cadvisor
 
 CMD     ["cadvisor", "-logtostderr"]
