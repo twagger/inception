@@ -7,7 +7,7 @@ We need to build the following architecture with a certain set of constraints :
 ![project architecture](img/architecture.png)
 
 
-## Table of contents
+# Table of contents
 1. [Basics](#basics)
 2. [Things that can help](#things-that-can-help)
 3. [Security](#security)
@@ -15,11 +15,9 @@ We need to build the following architecture with a certain set of constraints :
 5. [Installation](#installation)
 6. [Resources](#resources)
 
+# Basics
 
-
-## Basics
-
-### Docker network : what kind of network should I chose ?
+## Docker network : what kind of network should I chose ?
 
 Docker documentation says :
 >In terms of Docker, a **bridge network** uses a software bridge which allows containers connected to the same bridge network to communicate, while providing isolation from containers which are not connected to that bridge network. The Docker bridge driver automatically installs rules in the host machine so that containers on different bridge networks cannot communicate directly with each other.
@@ -33,7 +31,9 @@ Unlike default bridge network, which is automatically created by Docker when you
 * **Better isolation** : the containers are not attached to a default network where they can communicate with other unrelated containers
 * Containers on the same network share **environment variables**
 
-### Depend-on : Control startup and shutdown order in Compose 
+<br />
+
+## Depend-on : Control startup and shutdown order in Compose 
 
 Docker-compose offers the possibility to condition thoffers the possibility of conditioning the start of a container to the status of another.
 
@@ -73,7 +73,9 @@ location            ~* \.php$
 
 if you launch the nginx container before the wordpress container has finished installing and starting, you will generate **errors** in the nginx container. In addition, your web server will be accessible but some sites will return `502 bad gateway` errors.
 
-### Healthcheck : Check that your container is ok
+<br />
+
+## Healthcheck : Check that your container is ok
 
 To help knowing the status of your container, you can tell docker to launch a certain command to check its status.
 
@@ -91,15 +93,19 @@ For some services, you can find healthcheck command online. Below is a **usefull
 netstat -an | grep <your port> /dev/null; if [ 0 != $$? ]; then exit 1; fi;
 ```
 
-## Things that can help
+<br />
 
-### Launch a shell on a running container
+# Things that can help
+
+## Launch a shell on a running container
 
 ```sh
 docker exec -ti <container_name> sh
 ```
 
-### Access container's log
+<br />
+
+## Access container's log
 
 You should redirect the logs of the services hosted in your container to stdout / stderr. Usually it is possible in the configuration files of the services, for example for nginx :
 
@@ -121,9 +127,11 @@ to see the logs in real time :
 docker logs <container_name> --follow
 ```
 
-## Security
+<br />
 
-### USER instruction in Dockerfile
+# Security
+
+## USER instruction in Dockerfile
 
 ```Dockerfile
 USER    	www-data
@@ -138,7 +146,9 @@ I used it especially to **run the instructions at runtime with a non root user**
 * As a root, you can do a lot of things without restrictions on your container. This is convenient, but a **malicious user can use your container to get a root access on the host**.
 * Finaly, using a non root user in your Dockerfile will **force you to understand and to manage properly the files and locations your application needs to access**. It is better if you are in a learning process.
 
-### PORTS : binding host with containers in Docker-compose
+<br />
+
+## PORTS : binding host with containers in Docker-compose
 
 ```yml
  ftp:
@@ -157,7 +167,9 @@ It may seem like a good idea to bind the ports of your containers with the ports
 
 **BUT** in the context of a **multi-containers application**, we have to think carefully about what should be the entrypoint(s) of the application, and only expose these. In our case, we only want to **bind port 443 of the host with the port 443 of Nginx container**.
 
-### Networks
+<br />
+
+## Networks
 
 Containers on the same network can communicate.
 
@@ -174,32 +186,33 @@ network 2 : wordpress / mariadb
 
 In the docker-compose.yml file, nginx will only be on `network 1`, mariadb on `network 2` and wordpress on `network 1` and `network 2`.
 
-## Bonus add more services to the application
+<br />
 
-### Nginx parameterization
+# Bonus add more services to the application
+
+## Nginx parameterization
 
 To have a better undestanding of nginx, I chose to use the Nginx container as the single entrypoint for all "web" services and to proxy other containers.
 
-Understanding nginx http proxy :
-
+* Understanding nginx http proxy :
 [https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching](https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching)
 
-Understanding nginx fastCGI proxy :
-
+* Understanding nginx fastCGI proxy :
 [https://www.digitalocean.com/community/tutorials/understanding-and-implementing-fastcgi-proxying-in-nginx](https://www.digitalocean.com/community/tutorials/understanding-and-implementing-fastcgi-proxying-in-nginx)
 
+<br />
 
-### Redis cache
+## Redis cache
 
 Very good article from [@Catherine Macharia](https://www.section.io/engineering-education/authors/catherine-macharia/) explaining Wordpress and Redis cache : [How to Set Up and Configure Redis Caching for WordPress](https://www.section.io/engineering-education/how-to-set-up-and-configure-redis-caching-for-wordpress/)
 
 Some interesting quotes from this article :
 
-#### What is redis
+### What is redis
 
 >Redis is an open-source in-memory data structure store that can be used as a caching system. It is a memory caching software that runs as a service in the background. This allows you to cache and store data in memory for high-performance data retrieval and storage. 
 
-#### How Redis cache works
+### How Redis cache works
 
 >Assume you have a web application running on a server using a database like MySQL. That web application needs to retrieve some records from this database. Such queries take some time to return the requested records. And, if the query is expensive, a user waiting for that data for more than one minute may have a bad experience.
 >
@@ -207,31 +220,41 @@ Some interesting quotes from this article :
 >
 >Instead, the web server can check with Redis if it has the data it wants. So when another call is made and requires the same query transaction, instead of hitting the MySQL server again, the Redis object will serve the request from the object cache.
 
-### FTP server
+<br />
+
+## FTP server
 
 I chose to use [vsftpd](https://security.appspot.com/vsftpd.html) as it is easy to install and configure and it is very well documented online.
 
 Nothing special about this one, you can spend some time of course with the parameterization of rights, access and authentication but I chose not to.
 
-### Static website (using HUGO)
+<br />
+
+## Static website (using HUGO)
 
 [HUGO](https://gohugo.io/) is very nice to use and work with. It is at the same time really small and presents a lot of good features, with the possibility to parameterize it with command line.
 
 It also comes with its own web server to run it standalone in a container :)
 
-### Adminer
+<br />
+
+## Adminer
 
 Nothing special about this one. 
 
 If you seek to build a dedicated container for it, you should build another php-fpm container to process the php of Adminer and adapt `nginx.conf` so you process the php  traffic properly between this container and the wordpress one.
 
-### cAdvisor
+<br />
+
+## cAdvisor
 
 A service that allow you to check your containers resource consoumption. I didn't zoom a lot on it.
 
 It comes with its own server so I proxyied it with nginx. As it changes its URL it involve `rewrite` in nginx conf for a proper redirection.
 
-## Installation
+<br />
+
+# Installation
 
 Be sure that you have Docker and Docker compose installed on you machine. Follow instructions on Docker website to [install Docker Engine](https://docs.docker.com/engine/install/). 
 
@@ -248,13 +271,13 @@ To access the website, launch a browser and enter (you will have to bypass the s
 https://twagner.42.fr
 ```
 
-## Author
+# Author
 
 👨 **Thomas WAGNER**
 
 * Github: [@twagger](https://github.com/twagger/)
 
-## Resources
+# Resources
 * [Best practices for building containers](https://cloud.google.com/architecture/best-practices-for-building-containers)
 * [Top 20 Dockerfile best practices](https://sysdig.com/blog/dockerfile-best-practices/)
 * [Docker ARG, ENV and .env - a Complete Guide](https://vsupalov.com/docker-arg-env-variable-guide/#arg-and-env-availability)
