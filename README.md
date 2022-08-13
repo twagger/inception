@@ -165,6 +165,17 @@ In the docker-compose.yml file, nginx will only be on `network 1`, mariadb on `n
 
 ## Bonus : Add more services the the application !
 
+### Nginx parameterization
+
+To have a better undestanding of nginx, I chose to use the Nginx container as the single entrypoint for all "web" services and to proxy other containers when it comes to web services.
+
+Understanding nginx http proxy :
+[https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching](https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching)
+
+Understanding nginx fastCGI proxy :
+[https://www.digitalocean.com/community/tutorials/understanding-and-implementing-fastcgi-proxying-in-nginx](https://www.digitalocean.com/community/tutorials/understanding-and-implementing-fastcgi-proxying-in-nginx)
+
+
 ### Redis cache
 
 Very good article from [@Catherine Macharia](https://www.section.io/engineering-education/authors/catherine-macharia/) explaining Wordpress and Redis cache : [How to Set Up and Configure Redis Caching for WordPress](https://www.section.io/engineering-education/how-to-set-up-and-configure-redis-caching-for-wordpress/)
