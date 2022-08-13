@@ -6,6 +6,17 @@ We need to build the following architecture with a certain set of constraints :
 
 ![project architecture](img/architecture.png)
 
+
+## Table of contents
+1. [Basics](#basics)
+2. [Things that can help](#things-that-can-help)
+3. [Security](#security)
+4. [Bonus : Add more services to the application](#bonus-add-more-services-to-the-application)
+5. [Installation](#installation)
+6. [Resources](#resources)
+
+
+
 ## Basics
 
 ### Docker network : what kind of network should I chose ?
@@ -163,7 +174,7 @@ network 2 : wordpress / mariadb
 
 In the docker-compose.yml file, nginx will only be on `network 1`, mariadb on `network 2` and wordpress on `network 1` and `network 2`.
 
-## Bonus : Add more services the the application !
+## Bonus add more services to the application
 
 ### Nginx parameterization
 
