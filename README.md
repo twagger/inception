@@ -89,7 +89,19 @@ docker exec -ti <container_name> sh
 ```
 
 ### Access container's log
-(assuming you are redirecting your services logs to stdout/stderr)
+
+You should redirect the logs of the services hosted in your container to stdout / stderr. Usually it is possible in the configuration files of the services, for example for nginx :
+
+```conf
+...
+http {
+    access_log  /dev/stdout;
+    error_log   /dev/stderr;
+...
+```
+
+This allows you to use the `docker logs <container>` command :
+
 ```sh
 docker logs <container_name>
 ```
@@ -190,6 +202,10 @@ Nothing special about this one.
 If you seek to build a dedicated container for it, you should build another php-fpm container to process the php of Adminer and adapt `nginx.conf` so you process the php  traffic properly between this container and the wordpress one.
 
 ### cAdvisor
+
+A service that allow you to check your containers resource consoumption. I didn't zoom a lot on it.
+
+It comes with its own server so I proxyied it with nginx. As it changes its URL it involve `rewrite` in nginx conf for a proper redirection.
 
 ## Installation
 
