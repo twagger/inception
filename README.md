@@ -167,7 +167,7 @@ In the docker-compose.yml file, nginx will only be on `network 1`, mariadb on `n
 
 ### Nginx parameterization
 
-To have a better undestanding of nginx, I chose to use the Nginx container as the single entrypoint for all "web" services and to proxy other containers when it comes to web services.
+To have a better undestanding of nginx, I chose to use the Nginx container as the single entrypoint for all "web" services and to proxy other containers.
 
 Understanding nginx http proxy :
 [https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching](https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching)
