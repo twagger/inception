@@ -35,7 +35,7 @@ Unlike default bridge network, which is automatically created by Docker when you
 
 ## Depend-on : Control startup and shutdown order in Compose 
 
-Docker-compose offers the possibility to condition thoffers the possibility of conditioning the start of a container to the status of another.
+Docker-compose offers the possibility to condition the start of a container to the status of another.
 
 ```yml
 nginx:
