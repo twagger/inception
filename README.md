@@ -1,6 +1,6 @@
 # Welcome to inception 🐋
 
-This project is about using Docker and Docker compose to create a small multi-containers application with a wordpress website, running with php-fmp, nginx and mariadb.
+This project is about using **Docker** and **Docker compose** to create a small multi-containers application with a wordpress website, running with php-fmp, nginx and mariadb.
 
 We need to build the following architecture with a certain set of constraints :
 
@@ -260,11 +260,11 @@ Be sure that you have Docker and Docker compose installed on you machine. Follow
 
 Clone the repository:
 ```sh
-$> git clone git@github.com:twagger/inception.git
+git clone git@github.com:twagger/inception.git
 ```
 Make to build the complete application (build images and run them) :
 ```sh
-$> make
+make
 ```
 To access the website, launch a browser and enter (you will have to bypass the security warning as the certificate is self-signed) :
 ```
